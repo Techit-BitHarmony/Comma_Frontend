@@ -1,0 +1,27 @@
+@layer components {
+	h1,
+	h2,
+	h3 {
+		@apply cursor-default text-primary-dark dark:text-primary-light;
+	}
+
+	h1 {
+		@apply text-4xl font-bold;
+	}
+
+	a {
+		@apply transition-all;
+		@apply text-primary-dark hover:text-primary;
+		@apply dark:text-primary dark:hover:text-primary-light;
+	}
+
+	.text {
+		&-inverse {
+			@apply text-primary-light dark:text-primary-dark;
+		}
+	}
+
+	.title {
+		@apply mb-8 text-xl sm:text-3xl;
+	}
+}

@@ -1,38 +1,60 @@
-# create-svelte
+# SvelteKit Music App Example
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/main/packages/create-svelte).
+The project was created as part of the [Sveltekit Hackathon](https://hack.sveltesociety.dev/) and is intended to show examples of how to connect and process data as well as some practical examples of how to develop frontend components with tailwindcss.
+The project is open source and collaboration / further development is welcome.
 
-## Creating a project
+<table><tr>
+<td> <img src="public/screenshot1.png" width="600" alt="Screenshot1"> </td>
+<td> <img src="public/screenshot2.png" width="245" alt="Screenshot2"> </td>
+</tr></table>
 
-If you're seeing this, you've probably already done this step. Congrats!
+[Live Demo](https://music-tayfuuu.vercel.app)
 
-```bash
-# create a new project in the current directory
-npm create svelte@latest
-
-# create a new project in my-app
-npm create svelte@latest my-app
-```
-
-## Developing
-
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+## Develope
 
 ```bash
-npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
+# 1. clone this repository
+git clone https://github.com/tguelcan/music.git
 ```
 
-## Building
-
-To create a production version of your app:
+2. [Register](https://developer.spotify.com/dashboard/create) an application on spotify developer and get the client & secred keys
 
 ```bash
-npm run build
+# 3. rename .env.example to .env and complete the variables with spotify client id and client secret
+mv .env.example .env
 ```
 
-You can preview the production build with `npm run preview`.
+```bash
+# 4. run local
+yarn && yarn dev
+```
 
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
+## Deploy
+
+For vercel, you do not need any further configuration except to adjust the environment variables.
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Ftguelcan%2Fmusic&env=SPOTIFY_CLIENT_ID,SPOTIFY_CLIENT_SECRET&envDescription=Spotify%20client%20id%20and%20secred%20needed%20for%20this%20application&project-name=musicapp)
+
+> To deploy your app with another adapter, take a look [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
+
+## Parts used
+
+### Toolchains
+
+- [Adapter Vercel](https://vercel.com/docs/beginner-sveltekit/adapters)
+- [Spotify Developer](https://developer.spotify.com)
+
+### Design
+
+Colors
+<img src="public/colors.png"  width="300" alt="Coolors"><br/>
+[coolors](https://coolors.co/f7f7f2-e4e6c3-899878-222725-121113)
+
+- [css.gg](https://css.gg/) icons
+- Raleway [Google font](https://fonts.google.com/specimen/Raleway) with [unplugin-fonts](https://github.com/cssninjaStudio/unplugin-fonts) for vite.
+- [TailwindCSS](https://tailwindcss.com/)
+
+### Upcoming
+
+- User authentication
+- ~~Search function~~ ☑️
