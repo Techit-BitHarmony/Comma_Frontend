@@ -1,8 +1,6 @@
 import type { Actions } from './$types';
 import z from 'zod';
 import { zfd } from 'zod-form-data';
-import { validateForm } from '$server';
-import { search } from '$server';
 
 const schema = zfd.formData({
 	q: zfd.text(z.string().min(1, { message: 'Search a required' }).max(50)),
