@@ -45,6 +45,7 @@
 		"vitest": "^0.25.3"
 	},
 	"dependencies": {
+		"@tosspayments/payment-widget-sdk": "^0.10.2",
 		"toastr": "^2.1.4",
 		"zod": "^3.21.4",
 		"zod-form-data": "^2.0.1"
