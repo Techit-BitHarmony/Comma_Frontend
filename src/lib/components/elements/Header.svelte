@@ -1,6 +1,22 @@
 <script>
 import SelectTheme from "$components/layout/Theme.svelte";
-import {loginUsername, isLogin, baseUrl} from "../store.js";
+import {loginUsername, isLogin} from "../store.js";
+import {setTokenCookie, checkAccessToken} from "$components/token.js";
+import {onMount} from "svelte";
+import {goto} from "$app/navigation";
+
+async function logout() {
+  setTokenCookie('accessToken', '', 0);
+  setTokenCookie('refreshToken', '', 0);
+
+  checkAccessToken();
+  await goto("/");
+}
+
+onMount(() => {
+  checkAccessToken();
+})
+
 </script>
 
 <div class="py-5 bg-gray-light dark:bg-gray-dark fixed inset-x-0 z-50 text-primary-dark dark:text-primary rounded-b-lg">
@@ -19,8 +35,8 @@ import {loginUsername, isLogin, baseUrl} from "../store.js";
         <div class="dropdown dropdown-end">
           <div tabindex="0" role="button" class="btn btn-ghost rounded-btn">{$loginUsername}</div>
           <ul tabindex="0" class="menu dropdown-content z-[1] p-2 shadow rounded-box w-52 mt-4 bg-gray-light dark:bg-gray-dark">
-            <li><a><i class="fa-solid fa-address-card"></i>마이페이지</a></li>
-            <li><a><i class="fa-solid fa-door-closed"></i>로그아웃</a></li>
+            <li><a href="/member/{$loginUsername}"><i class="fa-solid fa-address-card"></i>프로필</a></li>
+            <li><a on:click={logout}><i class="fa-solid fa-door-closed"></i>로그아웃</a></li>
           </ul>
         </div>
         <span class="mr-3"></span>
