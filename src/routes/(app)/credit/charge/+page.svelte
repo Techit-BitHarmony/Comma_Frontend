@@ -34,7 +34,7 @@ onMount(() => {
 
       alert('주문서 생성 성공');
 
-      window.location.href = `/credit/charge/payment/${chargeId}`;
+      window.location.href = `/credit/charge/payment?chargeId=${chargeId}`;
 
 
     } catch (error) {
