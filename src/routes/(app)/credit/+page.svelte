@@ -2,7 +2,7 @@
     import { onMount } from 'svelte';
   
     let restCredit = '';
-    let creditLogs = [];
+    let creditLogs: any[] = [];
   
     // 페이지 로드 시 서버에서 데이터를 가져옴
     onMount(async () => {
