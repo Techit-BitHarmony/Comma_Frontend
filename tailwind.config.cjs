@@ -38,7 +38,7 @@ const config = {
 				},
 				primary: {
 					// Light slate gray
-					light: '#778899',
+					light: 'rgba(76,88,122,0.75)',
 					// Cornflower blue
 					DEFAULT: '#6495ED',
 					// Eerie black
