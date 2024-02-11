@@ -25,8 +25,8 @@
         }
   
         const resp = await response.json();
-        restCredit = resp.data.restCredit;
-        creditLogs = resp.data.creditLogs;
+        restCredit = resp.restCredit;
+        creditLogs = resp.creditLogDtos;
       } catch (error) {
         console.error('데이터를 가져오는 중 오류 발생:', error);
       }
@@ -51,9 +51,9 @@
       <tbody>
         {#each creditLogs as log}
           <tr>
-            <td>{log.date}</td>
+            <td>{new Date(log.createDate).toLocaleDateString('ko-KR', )}</td>
             <td>{log.eventType}</td>
-            <td>{log.changeCredit}</td>
+            <td>{log.creditChangeAmount}</td>
             <td>{log.restCredit}</td>
           </tr>
         {/each}
