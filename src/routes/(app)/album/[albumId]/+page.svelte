@@ -2,7 +2,7 @@
 	import type { PageData } from './$types';
 	import { afterNavigate } from '$app/navigation';
 	import { base } from '$app/paths';
-	import Header from '$components/elements/Header.svelte';
+	import Header from '$components/elements/ArtistHeader.svelte';
 	import List from '$components/elements/List.svelte';
 
 	export let data: PageData;

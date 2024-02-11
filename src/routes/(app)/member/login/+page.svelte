@@ -1,60 +1,78 @@
-<script lang="ts">
+<script>
+  import {baseUrl} from "$components/store.js";
+  import {toastWarning} from "$components/toastr.js";
+  import {goto} from "$app/navigation";
+  import {setTokenCookie, checkAccessToken} from "$components/token.js";
 
-  import { onMount } from 'svelte';
-  
-  // 컴포넌트가 마운트된 후 실행되는 함수
-  onMount(() => {
-    const form = document.getElementById('loginForm');
-  
-    // 폼이 제출되었을 때
-    form.addEventListener('submit', async function(event) {
-      event.preventDefault(); // 기본 제출 행동 방지
-      const username = form.elements['username'].value;
-      const password = form.elements['password'].value;
-  
-      try {
-        const response = await fetch('http://localhost:8090/member/login', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({ username, password })
-        });
-  
-        if (!response.ok) {
-          throw new Error('네트워크 오류: ' + response.statusText);
-        }
-  
-        const data = await response.json();
-        const accessToken = data.data.accessToken;
-        const refreshToken = data.data.refreshToken;
-  
-        // accessToken과 refreshToken을 로컬 저장소에 저장
-        localStorage.setItem('accessToken', accessToken);
-        localStorage.setItem('refreshToken', refreshToken);
-  
-        // 로그인 성공 메시지 표시
-        alert('로그인 성공');
-  
-        // 이후 작업: 로그인 성공 후 리다이렉트 또는 추가 작업 수행 가능
-  
-      } catch (error) {
-        console.error('로그인 오류:', error);
-        // 오류 메시지 표시 또는 사용자에게 다른 조치를 안내할 수 있습니다.
+  async function handleSubmit(event) {
+    event.preventDefault();
+    const formData = new FormData(event.target);
+
+    if (formData) {
+      const jsonData = {};
+      for (let pair of formData.entries()) {
+        jsonData[pair[0]] = pair[1];
       }
-    });
-  });
-  
-  </script>
-  
-  <div class="container my-4 space-y-4">
-  
-  <form id=loginForm>
-      <label for="username">아이디:</label>
-      <input type="text" name="username" id="username" placeholder="아이디" required>
-      <label for="password">비밀번호:</label>
-      <input type="text" name="password" id="password" placeholder="비밀번호" required>
-      <button type="submit">로그인</button>
-  </form>
-  
+
+      const response = await fetch(`${$baseUrl}/member/login`, {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(jsonData),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        if (errorData.username) { // @Valid 로 처리 된 내용
+          toastWarning(errorData.message);
+          return;
+        }
+
+        if (errorData.password) { // @Valid 로 처리 된 내용
+          toastWarning(errorData.message);
+          return;
+        }
+
+        toastWarning(errorData.message); // Exception 으로 처리 된 message
+        return;
+      }
+
+      const responseData = await response.json();
+      const { accessToken, refreshToken } = responseData.data;
+
+      setTokenCookie('accessToken', accessToken, 1);
+      setTokenCookie('refreshToken', refreshToken, 24 * 7);
+
+      checkAccessToken();
+      // await goto("/");
+      alert('로그인 성공')
+    }
+  }
+</script>
+
+<div class="container my-4 space-y-4">
+  <div class="pl-10 pr-10">
+    <div class="flex flex-col">
+      <h2 class="text-3xl font-bold border-bottom py-2 m-5 text-center dark:text-primary">로그인</h2>
+      <form on:submit="{handleSubmit}" method="post">
+        <div class="flex flex-col m-5">
+          <label for="email" class="form-label">아이디</label>
+          <input class="input input-bordered dark:input-primary bg-gray-light dark:bg-gray-dark mt-3 max-w-full" name="username" id="username" type="text" placeholder="이메일을 입력해주세요."/>
+        </div>
+        <div class="flex flex-col m-5">
+          <label for="password" class="form-label">비밀번호</label>
+          <input class="input input-bordered dark:input-primary bg-gray-light dark:bg-gray-dark mt-3 max-w-full" name="password" id="password" type="password" placeholder="비밀번호를 입력해주세요."/>
+        </div>
+        <div class="flex flex-col m-5">
+          <button type="submit" class="btn dark:btn-primary hover:btn-primary dark:hover:btn-ghost mt-3">로그인</button>
+        </div>
+        <div class="flex flex-col m-5 items-center">
+          <span class="text-center text-opacity-30"> ----- 처음 이용하시나요? ----- </span>
+          <a class="btn dark:btn-primary hover:btn-primary dark:hover:btn-ghost mt-3 w-6/12" href="/member/register">회원가입</a>
+        </div>
+      </form>
+    </div>
   </div>
+</div>

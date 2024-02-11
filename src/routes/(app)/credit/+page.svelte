@@ -7,7 +7,11 @@
     // 페이지 로드 시 서버에서 데이터를 가져옴
     onMount(async () => {
       try {
-        const accessToken = localStorage.getItem('accessToken');
+        const accessToken = document.cookie
+        .split('; ')
+        .find(row => row.startsWith('accessToken='))
+        ?.split('=')[1];
+        
         if (!accessToken) {
           throw new Error('AccessToken이 없습니다.');
         }

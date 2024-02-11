@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { generateSrcset, convertMilliseconds, removeEmptyElements } from '$helper';
-	import { audioTrack } from '$components/player/store';
+	import { audioTrack } from '$components/store';
 	export let title: string | null = null;
 	export let tracks: object;
 	// Remove empty elements from array
