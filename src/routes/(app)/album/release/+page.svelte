@@ -1,21 +1,32 @@
 <script>
-    import { writable } from 'svelte/store';
     import { baseUrl } from "$components/store.js";
-    import { toastWarning } from "$components/toastr.js";
+    import { toastWarning, toastNotice } from "$components/toastr.js";
     import { getCookie } from "$components/token.js";
 
+    let albumname = $state(""); // 앨범 제목을 저장하는 변수
+    let filePath = $state(""); // 업로드된 파일의 URL을 저장하는 변수
+    let genre = $state("default"); // 앨범 장르를 저장하는 변수
     let licenseChecked = $state(false); // 라이센스 체크박스의 상태를 저장하는 변수
-    let permitChecked = $state(false); // 라이센스 체크박스의 상태를 저장하는 변수
     let licenseDescription = $state("해당 곡의 라이센스"); // 라이센스 설명을 저장하는 변수
+    let permitChecked = $state(false); // 라이센스 체크박스의 상태를 저장하는 변수
+    let price = $state(0); // 가격을 저장하는 변수
+    let musicImageFile;
 
     async function releaseFormSubmit(event) {
         event.preventDefault();
-        const formData = new FormData(event.target);
+        const formData = new FormData();
 
         if (formData) {
-            const formData = new FormData();
-            for (let pair of formData.entries()) {
-                formData.append(pair[0], pair[1]);
+            formData.append('albumname', albumname);
+            formData.append('filePath', filePath);
+            formData.append('genre', genre);
+            formData.append('license', licenseChecked ? 'true' : 'false');
+            formData.append('licenseDescription', licenseDescription);
+            formData.append('permit', permitChecked ? 'true' : 'false');
+            formData.append('price', price.toString());
+
+            if (musicImageFile) {
+                formData.append('musicImageFile', musicImageFile);
             }
 
             const response = await fetch(`${$baseUrl}/album/release`, {
@@ -37,7 +48,6 @@
                 toastWarning(errorData.message);
                 return;
             }
-
             const responseData = await response.json();
         }
     }
@@ -54,8 +64,10 @@
             method: 'GET',
             headers: {
                 'Authorization': getCookie('accessToken'),
-            },
+            }
         });
+
+        const statElement = document.getElementById('stat');
 
         if (res.ok) {
             const { data } = await res.json();
@@ -68,18 +80,36 @@
             //releaseFormsubmit에서 업로드 된 링크 없으면 반환
 
             if (uploadRes.ok) {
-                alert('업로드 성공!');
+                filePath = data.uploadUrl;
+                if (statElement) statElement.innerHTML = '업로드 성공!';
+                toastNotice('업로드 성공!');
             } else {
-                alert('업로드 실패!');
+                if (statElement) statElement.innerHTML = '업로드 실패!';
+                toastWarning('업로드 실패!');
             }
         } else {
-            alert('Presigned URL을 받아오는 데 실패했습니다.');
+            if (statElement) statElement.innerHTML = 'Presigned URL을 받아오는 데 실패했습니다.';
+            toastWarning('Presigned URL을 받아오는 데 실패했습니다.');
         }
     }
 
     function handleFileChange(event) {
+        const statElement = document.getElementById('stat');
         const file = event.target.files[0];
         if (!file) return;
+
+        // 파일 확장자 가져오기
+        const fileExtension = file.name.split('.').pop().toLowerCase();
+
+        // 확장자 제한
+        const allowedExtensions = ['mp3', 'wav', 'flac'];
+
+        // 확장자가 아니라면 오류
+        if (!allowedExtensions.includes(fileExtension)) {
+            if (statElement) statElement.innerHTML = '사용할 수 없는 파일입니다.';
+            toastWarning('사용할 수 없는 파일입니다.');
+            return;
+        }
 
         musicFile = file;
         uploading = true;
@@ -88,6 +118,29 @@
         uploadMusicFile().finally(() => {
             uploading = false;
         });
+    }
+
+    function handleImageFileChange(event) {
+        const statElement = document.getElementById('stat');
+        const file = event.target.files[0];
+        if (!file) return;
+
+        // 파일 확장자 가져오기
+        const fileExtension = file.name.split('.').pop().toLowerCase();
+
+        // 확장자 제한
+        const allowedExtensions = ['jpg', 'jpeg', 'png'];
+
+        // 확장자가 아니라면 오류
+        if (!allowedExtensions.includes(fileExtension)) {
+            if (statElement) statElement.innerHTML = '사용할 수 없는 파일입니다.';
+            toastWarning('사용할 수 없는 파일입니다.');
+            return;
+        }
+
+        //TODO 나중에 이미지 업로드되면 미리보기 바뀌게 하고싶은데..
+
+        musicImageFile = file;
     }
 </script>
 
@@ -108,12 +161,12 @@
                     앨범 이미지
                     <span class="block w-64 h-64 relative">
                         <img class="w-full h-full object-cover" src="https://kv6d2rdb2209.edge.naverncp.com/GSctnLFiOr/defaultimage.jpg?type=f&w=300&h=300&ttype=jpg" alt="Album Cover" />
-                        <input class="mt-2 mb-10" type="file" id="musicImageFile" name="musicImageFile">
+                        <input class="mt-2 mb-10" type="file" id="musicImageFile" name="musicImageFile" on:change={handleImageFileChange}>
 
                         음악 파일
                         <input class="mb-3" type="file" id="musicFile" name="musicFile" on:change={handleFileChange}>
-                        <label for="musicFile" class="font-bold">파일 업로드</label>
-                                                {#if uploading}
+                        <label for="musicFile" class="font-bold" id="stat">파일 업로드</label>
+                        {#if uploading}
                             <span class="loading loading-spinner loading-md">파일 업로드 중...</span>
                         {/if}
                     </span>
@@ -122,10 +175,10 @@
                 <!-- Right Section -->
                 <div class="flex flex-col m-5 w-1/2">
                     제목
-                    <input class="input input-bordered dark:input-primary bg-gray-light dark:bg-gray-dark mt-3 mb-3 max-w-full" name="albumname" id="albumname" placeholder="제목을 입력해주세요." value="">
+                    <input class="input input-bordered dark:input-primary bg-gray-light dark:bg-gray-dark mt-3 mb-3 max-w-full" name="albumname" id="albumname" placeholder="제목을 입력해주세요." bind:value={albumname}>
 
                     곡 장르
-                    <select class="select select-bordered bg-gray-light dark:bg-gray-dark w-full max-w-xs mb-3" name="genre" value="default">
+                    <select class="select select-bordered bg-gray-light dark:bg-gray-dark w-full max-w-xs mb-3" name="genre" bind:value={genre}>
                         <option disabled selected>장르를 선택해주세요.</option>
                         <option value="default">기본</option>
                         <option value="rock">락</option>
@@ -152,7 +205,7 @@
                     <!-- 가격 -->
                     {#if permitChecked} <!-- 유료 전환 체크박스가 체크되어 있을 때만 가격 입력 필드를 표시 -->
                         가격
-                        <input class="input input-bordered dark:input-primary bg-gray-light dark:bg-gray-dark mb-3 max-w-full" type="number" id="price" name="price" min="0" value="0">
+                        <input class="input input-bordered dark:input-primary bg-gray-light dark:bg-gray-dark mb-3 max-w-full" type="number" id="price" name="price" min="0" bind:value={price}>
                     {/if}
 
                     <div class="flex flex-col m-5">
