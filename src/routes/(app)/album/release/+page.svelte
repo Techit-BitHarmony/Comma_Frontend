@@ -2,6 +2,7 @@
     import { baseUrl } from "$components/store.js";
     import { toastWarning, toastNotice } from "$components/toastr.js";
     import { getCookie } from "$components/token.js";
+    import {goto} from "$app/navigation";
 
     let albumname = $state(""); // 앨범 제목을 저장하는 변수
     let filePath = $state(""); // 업로드된 파일의 URL을 저장하는 변수
@@ -38,17 +39,20 @@
                 body: formData,
             });
 
+            const responseData = await response.json();
             if (!response.ok) {
-                const errorData = await response.json();
 
-                if (errorData.albumname) {
-                    toastWarning(errorData.message);
+                if (responseData.albumname) {
+                    toastWarning(responseData.message);
                 }
 
-                toastWarning(errorData.message);
+                toastWarning(responseData.message);
                 return;
             }
-            const responseData = await response.json();
+
+            //TODO 나중에 앨범 등록 성공시 앨범 상세 페이지로 이동하게 변경
+            toastNotice('앨범이 성공적으로 등록되었습니다.');
+            await goto("/");
         }
     }
 
@@ -74,10 +78,6 @@
 
             // Presigned URL로 파일 업로드
             const uploadRes = await fetch(data.uploadUrl, { method: 'PUT', body: musicFile });
-
-            //TODO 아래꺼 로딩으로 변경
-            //완료시 MsgAlert로 변경
-            //releaseFormsubmit에서 업로드 된 링크 없으면 반환
 
             if (uploadRes.ok) {
                 filePath = data.uploadUrl;
