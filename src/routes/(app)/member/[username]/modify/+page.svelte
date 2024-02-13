@@ -5,6 +5,7 @@
 	import { writable } from 'svelte/store';
     import {toastWarning, toastNotice} from "$components/toastr.js";
     import {goto} from "$app/navigation";
+    import MypageNav from '$components/elements/MypageNav.svelte';
 
     let user = {
         "username" : writable(),
@@ -99,20 +100,22 @@
 <div class="container my-4 space-y-4">
     <div class="pl-10 pr-10">
       <div class="flex flex-col">
+        <MypageNav />
+        <div class="border-t border-gray-500"></div>
         <h2 class="text-3xl font-bold border-bottom py-2 m-5 text-center dark:text-primary">마이페이지</h2>
-
+        <div class="justify-center">
             <form on:submit="{handleSubmit}" method="post">
                 <div class="flex flex-row m-5">
-                  <label for="username" class="form-label input input-bordered w-1/8 h-12 flex items-center justify-center mt-3 mr-1">아이디</label>
-                  <input class="input input-bordered dark:input-primary bg-gray-light dark:bg-gray-dark mt-3 max-w-full w-3/4 h-12 flex items-center justify-center" name="username" id="username" type="text" readonly value="{user.username}"/>
+                  <label for="username" class="form-label input input-bordered w-1/4 h-12 flex items-center justify-center mt-3 mr-1">아이디</label>
+                  <input class="input input-bordered dark:input-primary bg-gray-light dark:bg-gray-dark mt-3 w-full h-12 flex items-center justify-center" name="username" id="username" type="text" readonly value="{user.username}"/>
                 </div>
                 <div class="flex flex-row m-5">
-                    <label for="nickname" class="form-label input input-bordered w-1/8 h-12 flex items-center justify-center mt-3 mr-1">닉네임</label>
-                    <input class="input input-bordered dark:input-primary bg-gray-light dark:bg-gray-dark mt-3 max-w-full w-3/4 h-12 flex items-center justify-center" name="nickname" id="nickname" type="text" value="{user.nickname}"/>
+                    <label for="nickname" class="form-label input input-bordered w-1/4 h-12 flex items-center justify-center mt-3 mr-1">닉네임</label>
+                    <input class="input input-bordered dark:input-primary bg-gray-light dark:bg-gray-dark mt-3 w-full h-12 flex items-center justify-center" name="nickname" id="nickname" type="text" value="{user.nickname}"/>
                   </div>
                   <div class="flex flex-row m-5">
-                    <label for="email" class="form-label input input-bordered w-1/8 h-12 flex items-center justify-center mt-3 mr-1">이메일</label>
-                    <input class="input input-bordered dark:input-primary bg-gray-light dark:bg-gray-dark mt-3 max-w-full w-3/4 h-12 flex items-center justify-center" name="email" id="email" type="text" value="{user.Email}"/>
+                    <label for="email" class="form-label input input-bordered w-1/4 h-12 flex items-center justify-center mt-3 mr-1">이메일</label>
+                    <input class="input input-bordered dark:input-primary bg-gray-light dark:bg-gray-dark mt-3 w-full h-12 flex items-center justify-center" name="email" id="email" type="text" value="{user.Email}"/>
                   </div>
                 <div class="flex justify-center"> 
                         <div class="flex">
@@ -121,6 +124,7 @@
                         </div>
                 </div>
             </form>
+        </div>
       </div>
     </div>
   </div>
