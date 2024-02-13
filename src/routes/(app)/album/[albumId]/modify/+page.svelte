@@ -3,7 +3,8 @@
     import { baseUrl } from "$components/store.js";
     import { toastWarning, toastNotice } from "$components/toastr.js";
     import { getCookie } from "$components/token.js";
-    import {goto} from "$app/navigation";
+    import { goto } from "$app/navigation";
+    import { onMount } from 'svelte';
 
     let albumname = $state(""); // 앨범 제목을 저장하는 변수
     let genre = $state("default"); // 앨범 장르를 저장하는 변수
@@ -14,33 +15,73 @@
     let musicImageFile;
     let albumid = $page.params.albumId;
 
-    Init();
+    onMount(async () => {
+        try {
+            const memberResponse = await fetch(`${$baseUrl}/member/mypage`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': getCookie('accessToken'),
+                },
+            });
 
-    async function Init() {
-        console.log("asdfasdfsa " +albumid);
-        // const response = await fetch(`${$baseUrl}/album/detail/${albumid}`, {
-        //     method: 'GET',
-        //     credentials: 'include',
-        //     headers: {
-        //         'Content-Type': 'application/json'
-        //     }
-        // });
-        //
-        // const responseData = await response.json();
-        // if (!response.ok) {
-        //     toastWarning(responseData.message);
-        //     return;
-        // }
-        //
-        // albumname = responseData.albumname;
-        // genre = responseData.genre;
-        // licenseChecked = responseData.license;
-        // licenseDescription = responseData.licenseDescription;
-        // permitChecked = responseData.permit;
-        // price = responseData.price;
-    }
+            const albumResponse = await fetch(`${$baseUrl}/album/detail/${albumid}`, {
+                method: 'GET'
+            });
 
-    async function releaseFormSubmit(event) {
+            if (!memberResponse.ok) {
+                toastWarning("로그인이 필요한 서비스입니다.");
+                await goto("/");
+                return;
+            }
+
+            if (!albumResponse.ok) {
+                toastWarning("앨범 정보를 불러오는데 실패했습니다.");
+                await goto("/");
+                return;
+            }
+
+            const albumResponseData = await albumResponse.json();
+            const memberResponseData = await memberResponse.json();
+
+            if(albumResponseData.data.artistUsername !== memberResponseData.data.username) {
+                toastWarning("본인의 앨범만 수정할 수 있습니다.");
+                await goto("/");
+                return;
+            }
+
+            albumname = albumResponseData.data.albumname;
+            genre = albumResponseData.data.genre;
+            licenseChecked = albumResponseData.data.license;
+            licenseDescription = albumResponseData.data.licenseDescription;
+            permitChecked = albumResponseData.data.permit;
+            price = albumResponseData.data.price;
+
+            document.getElementById('albumname').value = albumname;
+            document.getElementById('license').checked = licenseChecked;
+            document.getElementById('permit').checked = permitChecked;
+            document.getElementById('albumCover').src = albumResponseData.data.imgPath;
+
+            const genreElement = document.getElementById('genre');
+            if (genreElement && genreElement instanceof HTMLSelectElement) {
+                genreElement.value = albumResponseData.data.genre;
+            }
+
+            const licenseDescriptionElement = document.getElementById('licenseDescription');
+            if (licenseDescriptionElement && licenseDescriptionElement instanceof HTMLTextAreaElement) {
+                licenseDescriptionElement.value = albumResponseData.data.licenseDescription;
+            }
+
+            const priceElement = document.getElementById('price');
+            if (priceElement && priceElement instanceof HTMLInputElement) {
+                priceElement.value = albumResponseData.data.price;}
+        } catch (error) {
+            toastWarning("앨범 정보를 불러오는데 실패했습니다.");
+            await goto("/");
+            return;
+        }
+    });
+
+    async function editFormSubmit(event) {
         event.preventDefault();
         const formData = new FormData();
 
@@ -117,12 +158,12 @@
 
             <div class="divider"></div>
 
-            <form on:submit="{releaseFormSubmit}" method="post" class="flex flex-row">
+            <form on:submit="{editFormSubmit}" method="post" class="flex flex-row">
                 <!-- Left Section -->
                 <div class="flex flex-col m-5 w-1/2 relative">
                     앨범 이미지
                     <span class="block w-64 h-64 relative">
-                        <img class="w-full h-full object-cover" src="https://kv6d2rdb2209.edge.naverncp.com/GSctnLFiOr/defaultimage.jpg?type=f&w=300&h=300&ttype=jpg" alt="Album Cover" />
+                        <img id="albumCover" class="w-full h-full object-cover" src="https://kv6d2rdb2209.edge.naverncp.com/GSctnLFiOr/defaultimage.jpg?type=f&w=300&h=300&ttype=jpg" alt="Album Cover" />
                         <input class="mt-2 mb-10" type="file" id="musicImageFile" name="musicImageFile" on:change={handleImageFileChange}>
                     </span>
                 </div>
