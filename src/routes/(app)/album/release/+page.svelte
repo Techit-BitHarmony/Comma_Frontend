@@ -14,6 +14,19 @@
     let musicImageFile;
 
     async function releaseFormSubmit(event) {
+        const memberResponse = await fetch(`${$baseUrl}/member/mypage`, {
+            method: 'GET',
+            headers: {
+                'Authorization': getCookie('accessToken'),
+            },
+        });
+
+        if (!memberResponse.ok) {
+            toastWarning("로그인이 필요한 서비스입니다.");
+            await goto("/");
+            return;
+        }
+
         event.preventDefault();
         const formData = new FormData();
 

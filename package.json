@@ -46,6 +46,7 @@
 	},
 	"dependencies": {
 		"daisyui": "^4.6.2",
+		"hls.js": "^1.5.4",
 		"toastr": "^2.1.4",
 		"zod": "^3.21.4",
 		"zod-form-data": "^2.0.1"
