@@ -10,7 +10,11 @@ onMount(() => {
   form.addEventListener('submit', async function(event) {
     event.preventDefault(); // 기본 제출 행동 방지
     const chargeAmount = form.elements['chargeAmount'].value;
-    const accessToken = localStorage.getItem('accessToken');
+    const accessToken = document.cookie
+        .split('; ')
+        .find(row => row.startsWith('accessToken='))
+        ?.split('=')[1];
+        
         if (!accessToken) {
           throw new Error('AccessToken이 없습니다.');
         }

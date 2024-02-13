@@ -11,7 +11,11 @@
   
   onMount(async () => {
         try {
-          const accessToken = localStorage.getItem('accessToken');
+          const accessToken = document.cookie
+        .split('; ')
+        .find(row => row.startsWith('accessToken='))
+        ?.split('=')[1];
+        
           if (!accessToken) {
             throw new Error('AccessToken이 없습니다.');
           }
