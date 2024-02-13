@@ -39,7 +39,7 @@
 
           if (!response.ok) {
             console.log(json);
-            window.location.href = `/credit/payment/fail?message=${json.message}&code=${json.code}`;
+            window.location.href = `/credit/charge/payment/fail?message=${json.message}&code=${json.code}`;
             return;
         }
             
