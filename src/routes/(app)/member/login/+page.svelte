@@ -70,7 +70,7 @@
         </div>
         <div class="flex flex-col m-5 items-center">
           <span class="text-center text-opacity-30"> ----- 처음 이용하시나요? ----- </span>
-          <a class="btn dark:btn-primary hover:btn-primary dark:hover:btn-ghost mt-3 w-6/12" href="/member/register">회원가입</a>
+          <a class="btn dark:btn-primary hover:btn-primary dark:hover:btn-ghost mt-3 w-6/12" href="/member/join">회원가입</a>
         </div>
       </form>
     </div>
