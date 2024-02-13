@@ -1,7 +1,7 @@
 <script>
     import {baseUrl} from "$components/store.js";
     import {toastWarning} from "$components/toastr.js";
-    import {toastNotice} from "$components/toastr.js"
+    import {toastNotice} from "$components/toastr"
     import {goto} from "$app/navigation";
   
     async function handleSubmit(event) {
