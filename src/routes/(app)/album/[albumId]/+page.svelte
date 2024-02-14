@@ -71,8 +71,8 @@
 			}
 		}
 
-		makeAudioTrack();
 		toggleHeart();
+		makeAudioTrack();
 	}
 
 	function makeCdnUrl(filePath) {
@@ -130,6 +130,11 @@
 	}
 
 	async function likeAlbum() {
+		if (!getCookie('accessToken')) {
+			await goto('/member/login');
+			return;
+		}
+
 		if (canLike === true) {
 			const response = await fetch(`${$baseUrl}/album/${albumId}/like`, {
 				method: 'POST',
