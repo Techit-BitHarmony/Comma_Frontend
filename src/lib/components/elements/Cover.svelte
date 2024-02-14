@@ -1,5 +1,12 @@
-<script lang="ts">
-	$: ({ albumname, imgPath, artistNickname, artistUsername, id } = $$restProps);
+<script>
+
+	let albumname, imgPath, artistNickname, artistUsername, id;
+	albumname = $$restProps.albumname;
+	imgPath = $$restProps.imgPath;
+	artistNickname = $$restProps.artistNickname;
+	artistUsername = $$restProps.artistUsername;
+	id = $$restProps.id;
+
 </script>
 
 <div class="bg-primary-dark dark:bg-primary-light p-3 rounded">

@@ -1,5 +1,5 @@
-<script lang="ts">
-	export let album: object;
+<script>
+	export let album;
 </script>
 
 <header class="relative">
