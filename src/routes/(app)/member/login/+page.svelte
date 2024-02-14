@@ -42,7 +42,10 @@
 
       const responseData = await response.json();
       const { username, accessToken, refreshToken } = responseData.data;
+<<<<<<< HEAD
 
+=======
+>>>>>>> dev
 
       setTokenCookie('accessToken', accessToken, 1);
       setTokenCookie('refreshToken', refreshToken, 24 * 7);
@@ -53,7 +56,8 @@
   )
 
       checkAccessToken();
-      await goto("/");
+      // await goto("/");
+      alert('로그인 성공')
     }
   }
 </script>
