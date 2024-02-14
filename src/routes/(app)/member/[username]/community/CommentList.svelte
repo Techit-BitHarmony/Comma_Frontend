@@ -128,7 +128,7 @@
 		</div>
 		<div class="flex justify-between">
 			{#if editingCommentId === comment.commentId}
-				<textarea class="textarea textarea-bordered textarea-sm w-full max-w-xs" bind:value={comment.content}></textarea>
+				<textarea class="textarea textarea-bordered textarea-sm w-full text-primary-dark dark:text-primary bg-base-200 dark:bg-gray-600 max-w-xs" bind:value={comment.content}></textarea>
 				<button class="btn btn-outline btn-xs" on:click={() => saveEdit(comment.commentId, comment.content)}
 					>저장</button
 				>
