@@ -18,10 +18,12 @@
 	let itemsPerPage = 10;
 	let totalElements = '';
 
-	let selectedButton = ''; // 버튼 선택 상태를 추적하는 변수
+	let selectedButton = '';
+	let currentCategory = '';
 
 	function selectButton(category) {
-		selectedButton = category; // 버튼 클릭 시 선택 상태 업데이트
+		selectedButton = category; 
+		currentCategory = category; 
 		loadArticles(category);
 	}
 
@@ -62,17 +64,18 @@
 
 	function previousPage() {
 		currentPage.update((n) => Math.max(n - 1, 1));
-		loadArticles();
+		loadArticles(currentCategory);
+		
 	}
 
 	function nextPage() {
 		currentPage.update((n) => n + 1);
-		loadArticles();
+		loadArticles(currentCategory);
 	}
 
 	function movePage(pageNumber) {
 		currentPage.set(pageNumber);
-		loadArticles();
+		loadArticles(currentCategory);
 	}
 
 	function scrollToArticle(articleId) {
@@ -256,7 +259,7 @@
 				>
 			{/if}
 		{/each}
-		{#if $totalPages > 0}
+		{#if $totalPages > $currentPage}
 			<button class="join-item btn btn-square" on:click={nextPage}>다음</button>
 		{/if}
 	</div>

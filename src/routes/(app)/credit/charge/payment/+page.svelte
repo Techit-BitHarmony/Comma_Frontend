@@ -34,22 +34,22 @@
 
 			if (!response.ok) {
 				toastWarning(resp.message);
-        await goto('/credit/charge')
+				await goto('/credit/charge');
 			}
 
 			username = resp.username;
 			chargeCode = resp.chargeCode;
 			chargeAmount = resp.chargeAmount;
 		} catch (error) {
-      toastWarning('결제창을 불러오는 데 실패하였습니다.');
+			toastWarning('결제창을 불러오는 데 실패하였습니다.');
 		}
 	});
 </script>
 
-<div class="card bg-base-200">
-	{#if username && chargeAmount && chargeCode}
-		<PaymentComponent {username} {chargeAmount} {chargeCode} />
-	{:else}
-		<p>Loading...</p>
-	{/if}
-</div>
+	<div class="card bg-base-200 max-w-[1000px] mx-auto mt-10">
+		{#if username && chargeAmount && chargeCode}
+			<PaymentComponent {username} {chargeAmount} {chargeCode} />
+		{:else}
+			<p>Loading...</p>
+		{/if}
+	</div>
