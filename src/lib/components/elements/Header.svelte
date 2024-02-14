@@ -1,48 +1,47 @@
-<script>
-import SelectTheme from "$components/layout/Theme.svelte";
-import {loginUsername, isLogin} from "../store.js";
-import {setTokenCookie, checkAccessToken} from "$components/token.js";
-import {onMount} from "svelte";
-import {goto} from "$app/navigation";
-
-async function logout() {
-  setTokenCookie('accessToken', '', 0);
-  setTokenCookie('refreshToken', '', 0);
-
-  checkAccessToken();
-  await goto("/");
-}
-
-onMount(() => {
-  checkAccessToken();
-})
-
+<script lang="ts">
+	import Back from '$components/elements/Back.svelte';
+	$: ({ name, images, artists, genres, release_date } = $$restProps);
 </script>
 
-<div class="py-5 bg-gray-light dark:bg-gray-dark fixed inset-x-0 z-50 text-primary-dark dark:text-primary rounded-b-lg">
-  <div class="container flex items-center justify-between">
-    <div class="flex items-center space-x-4 sm:space-x-6 ml-5">
-      <a href="/search" aria-label="Music Search"><i class="gg-search" /></a>
-      <SelectTheme />
-    </div>
-    <div>
-      <a href="/" class="text-2xl font-extrabold tracking-tight ring-2 px-2 py-1 ring-black dark:ring-primary hover:ring-primary dark:hover:ring-primary-light">
-        COM,MA
-      </a>
-    </div>
-    <div>
-      {#if $isLogin}
-        <div class="dropdown dropdown-end">
-          <div tabindex="0" role="button" class="btn btn-ghost rounded-btn">{$loginUsername}</div>
-          <ul tabindex="0" class="menu dropdown-content z-[1] p-2 shadow rounded-box w-52 mt-4 bg-gray-light dark:bg-gray-dark">
-            <li><a href="/member/{$loginUsername}"><i class="fa-solid fa-address-card"></i>프로필</a></li>
-            <li><a on:click={logout}><i class="fa-solid fa-door-closed"></i>로그아웃</a></li>
-          </ul>
-        </div>
-        <span class="mr-3"></span>
-      {:else}
-        <a class="btn btn-ghost" href="/member/login">로그인</a>
-      {/if}
-    </div>
-  </div>
+<div class="relative overflow-hidden pt-8 z-0">
+	<div class="container relative z-20">
+		<Back />
+	</div>
+	{#if images.length}
+		<img
+			alt="Artist"
+			srcset={generateSrcset(images)}
+			width="100%"
+			class="fixed inset-0 top-20 -z-10 h-80 w-full object-cover object-center"
+		/>
+	{:else}
+		<div class="bg-primary-dark fixed inset-0 top-20 -z-10 h-80 w-full" />
+	{/if}
+	<div class="fixed top-20 h-80 bg-primary-dark/70 inset-0 z-0" />
+
+	<div class="container relative z-20 pt-8 sm:pt-16 md:pt-24 pb-8">
+		<div>
+			<h1 class="text-4xl text-primary-light">
+				{name}
+			</h1>
+			{#if artists && artists.length}
+				<div class="mt-2 flex flex-wrap gap-2 max-w-md text-primary-light text-lg sm:text-xl">
+					{#if release_date} {transformDate(release_date).year} - {/if}
+					{#each artists as artist}
+						{artist.name}
+					{/each}
+				</div>
+			{/if}
+
+			{#if genres.length}
+				<div class="mt-4 flex flex-wrap gap-2 max-w-md">
+					{#each genres as genre}
+						<div class="pill">
+							{genre}
+						</div>
+					{/each}
+				</div>
+			{/if}
+		</div>
+	</div>
 </div>
