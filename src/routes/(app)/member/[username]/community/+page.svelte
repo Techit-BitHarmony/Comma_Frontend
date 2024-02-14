@@ -4,6 +4,7 @@
 	import { page } from '$app/stores';
 	import { goto } from '$app/navigation';
 	import { loginUsername } from '$components/store.js';
+	import { isLogin } from '$components/store.js';
 	import { baseUrl } from '$components/store.js';
 	import { toastNotice } from '$components/toastr';
 	import { toastWarning } from '$components/toastr';
@@ -23,20 +24,13 @@
 
 	async function loadArticles() {
 		try {
-			const accessToken = getCookie('accessToken');
-
-			if (!accessToken) {
-				toastWarning('로그인 해주세요.');
-			}
-
 			const response = await fetch(
 				$baseUrl + `/community/articles/user/${$page.params.username}?page=${$currentPage}`,
 				{
 					method: 'GET',
 					credentials: 'include',
 					headers: {
-						'Content-Type': 'application/json',
-						Authorization: `${accessToken}`
+						'Content-Type': 'application/json'
 					}
 				}
 			);
@@ -45,6 +39,7 @@
 
 			if (!response.ok) {
 				toastWarning(resp.message);
+				return;
 			}
 
 			articles.set(resp.data.articleList.content);
@@ -89,6 +84,7 @@
 
 			if (!accessToken) {
 				toastWarning('로그인 해주세요.');
+				return;
 			}
 
 			const response = await fetch($baseUrl + '/community/comments', {
@@ -101,7 +97,7 @@
 				body: JSON.stringify({ articleId, content })
 			});
 
-			const resp = await response.json(); 
+			const resp = await response.json();
 
 			if (!response.ok) {
 				toastWarning(resp.message);
@@ -110,7 +106,6 @@
 			location.reload();
 			scrollToArticle(articleId);
 			form.reset();
-
 		} catch (error) {
 			toastWarning('댓글 작성에 실패하였습니다.');
 		}
@@ -119,24 +114,26 @@
 
 <div class="container my-4 space-y-4">
 	<div class="flex justify-between items-center my-6 mb-4">
-		<h1>커뮤니티</h1>
-		<a class="btn btn-primary" href="./community/write">글쓰기</a>
+		<h1>{$page.params.username}님의 게시판</h1>
+		{#if $isLogin === true}
+			<a class="btn dark:btn-primary hover:btn-primary dark:hover:btn-ghost" href="./community/write">글쓰기</a>
+		{/if}
 	</div>
 
 	{#if $articles.length === 0}
 		<div class="flex justify-center">
-			<h2>등록된 게시글이 없습니다.</h2>
+			<h2 class="text-primary-dark dark:text-primary">등록된 게시글이 없습니다.</h2>
 		</div>
 	{/if}
 	{#each $articles as article, index}
-		<div class="card w-auto bg-base-100 shadow-xl">
+		<div class="card w-auto bg-base-100 dark:bg-gray-800 shadow-xl">
 			<div class="card-body">
 				<div class="flex justify-between">
 					<div class="flex-col items-center">
 						<h2 class="card-title mb-2">{article.title}</h2>
 						<div>
-							<span>작성자 {article.username}</span>
-							<span class="badge ml-2"
+							<span class="text-primary-dark dark:text-primary">작성자 : {article.username}</span>
+							<span class="badge dark:badge-primary ml-2"
 								>{new Date(article.createDate).toLocaleDateString('ko-KR', {
 									year: 'numeric',
 									month: '2-digit',
@@ -148,26 +145,26 @@
 						</div>
 					</div>
 					{#if $loginUsername === article.username}
-					<div class="dropdown">
-						<div tabindex="0" role="button" class="btn btm-xs">. . .</div>
-						<ul class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52">
-							<li><a href="./community/modify?articleId={article.id}">수정하기</a></li>
-							<li><DeleteButton articleId={article.id} /></li>
-						</ul>
-					</div>
+						<div class="dropdown">
+							<div tabindex="0" role="button" class="btn dark:btn-primary hover:btn-primary dark:hover:btn-ghost btm-xs">. . .</div>
+							<ul class="dropdown-content z-[1] menu p-2 shadow bg-base-100 dark:bg-gray-600 rounded-box w-52">
+								<li><a class="text-primary-dark dark:text-primary font-extrabold" href="./community/modify?articleId={article.id}">수정하기</a></li>
+								<li><DeleteButton articleId={article.id} /></li>
+							</ul>
+						</div>
 					{/if}
 				</div>
-				<div class="divider divider-neutral" />
-				<p>{article.content}</p>
-				<div class="divider mt-20">댓글</div>
+				<div class="divider divider-neutral dark:divider-accent" />
+				<p class="text-primary-dark dark:text-primary">{article.content}</p>
+				<div class="divider dark:divider-accent mt-20">댓글</div>
 
 				<details class="collapse bg-base-200">
-					<summary class="collapse-title text-sm font-medium">댓글 작성하기</summary>
-					<div class="collapse-content">
+					<summary class="collapse-title bg-base-200 dark:bg-gray-600 text-sm font-medium">댓글 작성하기</summary>
+					<div class="collapse-content bg-base-200 dark:bg-gray-600">
 						<form id="commentForm" on:submit={submitComment}>
 							<div>
 								<input
-									class="input input-bordered input-md w-full max-w-xs"
+									class="input input-bordered input-md bg-base-100 dark:bg-gray-800 w-full max-w-xs"
 									type="text"
 									name="content"
 									placeholder="댓글을 작성하세요."

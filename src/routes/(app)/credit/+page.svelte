@@ -63,22 +63,22 @@
 </script>
 
 <div class="container my-10 space-y-4">
-	<div class="card bg-base-100 p-2">
+	<div class="card bg-base-100 dark:bg-gray-800 p-2">
 		<div class="flex ms-3 mb-3">
-			<p class="text-3xl font-extrabold me-3">현재 크레딧 :</p>
-			<p class="text-3xl font-extrabold me-3">{restCredit}</p>
+			<p class="text-3xl text-primary-dark dark:text-primary font-extrabold me-3">현재 크레딧 :</p>
+			<p class="text-3xl text-primary-dark dark:text-primary font-extrabold me-3">{restCredit}</p>
 		</div>
 		<div>
-			<a href="/credit/charge" class="btn bg-base-200 btn-wide">충전하기</a>
-			<a href="/credit/withdraw/?restCredit={restCredit}" class="btn bg-base-200 btn-wide">출금하기</a>
+			<a href="/credit/charge" class="btn dark:btn-primary hover:btn-primary dark:hover:btn-ghost btn-wide">충전하기</a>
+			<a href="/credit/withdraw/?restCredit={restCredit}" class="btn dark:btn-primary hover:btn-primary dark:hover:btn-ghost btn-wide">출금하기</a>
 			{#if $loginUsername === 'admin'}
-			<a href="/credit/withdraw/admin" class="btn bg-warning">관리자 페이지</a>
+			<a href="/credit/withdraw/admin" class="btn btn-warning dark:btn-error">관리자 페이지</a>
 			{/if}
 		</div>
 	</div>
 
-	<div class="divider"></div>
+	<div class="divider dark:divider-accent"></div>
 	<CreditLogs {creditLogs} />
-	<div class="divider"></div>
+	<div class="divider dark:divider-accent"></div>
 	<Withdraws {withdraws} />
 </div>

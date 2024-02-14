@@ -11,6 +11,8 @@
 	export let articleId = '';
 
 	let comments: any[] = [];
+	let editingCommentId = null; // 수정 중인 댓글의 ID를 저장할 변수
+
 
 	onMount(async () => {
 		loadComments();
@@ -18,18 +20,11 @@
 
 	async function loadComments() {
 		try {
-			const accessToken = getCookie('accessToken');
-
-			if (!accessToken) {
-				toastWarning('로그인 해주세요.');
-			}
-
 			const response = await fetch($baseUrl + `/community/comments/${articleId}`, {
 				method: 'GET',
 				credentials: 'include',
 				headers: {
 					'Content-Type': 'application/json',
-					Authorization: `${accessToken}`
 				}
 			});
 
@@ -50,6 +45,7 @@
 
 		if (!accessToken) {
 			toastWarning('로그인 해주세요.');
+			return; 
 		}
 
 		try {
@@ -75,13 +71,52 @@
 			toastWarning('댓글 삭제하는 데 실패하였습니다.');
 		}
 	}
+
+	async function startEdit(commentId) {
+		editingCommentId = commentId;
+	}
+
+	async function saveEdit(commentId, newContent) {
+
+		const accessToken = getCookie('accessToken');
+
+		if (!accessToken) {
+			toastWarning('로그인 해주세요.');
+		}
+
+		try {
+			const response = await fetch($baseUrl + `/community/comments/${commentId}`, {
+				method: 'PUT',
+				credentials: 'include',
+				headers: {
+					'Content-Type': 'application/json',
+					Authorization: `${accessToken}`
+				},
+				body: JSON.stringify({ content: newContent })
+			});
+
+			const resp = await response.json();
+
+			if (!response.ok) {
+				toastWarning(resp.message);
+				return;
+			}
+
+			toastNotice('댓글 수정 성공');
+			loadComments();
+		} catch (error) {
+			toastWarning('댓글 수정하는 데 실패하였습니다.');
+		} finally {
+			editingCommentId = null; // 수정 완료 후 수정 상태 해제
+		}
+	}
 </script>
 
 <div class="card-body">
 	{#each comments as comment}
 		<div class="flex justify-between items-center">
-			<h5 class="card-title">{comment.username}</h5>
-			<span class="badge ml-2"
+			<h5 class="card-title text-primary-dark dark:text-primary">{comment.username}</h5>
+			<span class="badge dark:badge-primary ml-2"
 				>{new Date(comment.createDate).toLocaleDateString('ko-KR', {
 					year: 'numeric',
 					month: '2-digit',
@@ -92,14 +127,23 @@
 			>
 		</div>
 		<div class="flex justify-between">
-			<p class="ms-5">{comment.content}</p>
-			{#if $loginUsername === comment.username}
-			<button class="btn btn-outline btn-xs" on:click={() => deleteComment(comment.commentId)}
-				>삭제</button
-			>
-			<button class="btn btn-outline btn-xs">수정</button>
+			{#if editingCommentId === comment.commentId}
+				<textarea class="textarea textarea-bordered textarea-sm w-full max-w-xs" bind:value={comment.content}></textarea>
+				<button class="btn btn-outline btn-xs" on:click={() => saveEdit(comment.commentId, comment.content)}
+					>저장</button
+				>
+			{:else}
+				<p class="text-primary-dark dark:text-primary ms-5">{comment.content}</p>
+				{#if $loginUsername === comment.username}
+					<button class="btn dark:btn-primary hover:btn-primary dark:hover:btn-ghost btn-xs" on:click={() => startEdit(comment.commentId)}
+						>수정</button
+					>
+					<button class="btn dark:btn-primary hover:btn-primary dark:hover:btn-ghost btn-xs" on:click={() => deleteComment(comment.commentId)}
+						>삭제</button
+					>
+				{/if}
 			{/if}
 		</div>
-		<div class="border" />
+		<div class="border dark:border-accent" />
 	{/each}
 </div>

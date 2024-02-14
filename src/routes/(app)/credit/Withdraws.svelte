@@ -3,10 +3,10 @@
 	export let withdraws: any[] = [];
 </script>
 
-<div class="card bg-base-100 p-4">
-	<p class="text-3xl font-extrabold mb-3">출금 신청 내역</p>
+<div class="card bg-base-100 dark:bg-gray-800 p-4">
+	<p class="text-3xl text-primary-dark dark:text-primary font-extrabold mb-3">출금 신청 내역</p>
 	<table class="table">
-		<thead class="bg-gray-200 text-center text-base font-bold">
+		<thead class="bg-gray-200 dark:bg-gray-600 text-center text-primary-dark dark:text-primary text-lg font-bold">
 			<tr>
 				<th>날짜</th>
 				<th>은행명</th>
@@ -15,7 +15,7 @@
 				<th>처리상태</th>
 			</tr>
 		</thead>
-		<tbody class="text-center">
+		<tbody class="text-center text-primary-dark dark:text-primary">
 			{#each withdraws as withdraw}
 				<tr>
 					<td>{new Date(withdraw.applyDate).toLocaleDateString('ko-KR')}</td>

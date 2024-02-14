@@ -49,12 +49,12 @@
 </script>
 
 <div class="container my-4 space-y-4">
-	<div class="card-body bg-base-200">
+	<div class="card-body bg-base-100 dark:bg-gray-800">
 		<form id="chargeForm">
 			<div class="flex-auto">
-				<label class="label text-2xl font-bold mb-2" for="chargeAmount">크레딧 충전</label>
+				<label class="label text-2xl text-primary-dark dark:text-primary font-bold mb-2" for="chargeAmount">크레딧 충전</label>
 				<select
-					class="select select-bordered w-full max-w-xs mb-3"
+					class="select select-bordered w-full max-w-xs text-primary-dark dark:text-primary mb-3"
 					name="chargeAmount"
 					id="chargeAmount"
 					required
@@ -67,7 +67,7 @@
 					<option value="50000">50,000원</option>
 				</select>
 			</div>
-			<button type="submit" class="btn bg-slate-300">충전하기</button>
+			<button type="submit" class="btn dark:btn-primary hover:btn-primary dark:hover:btn-ghost">충전하기</button>
 		</form>
 	</div>
 </div>

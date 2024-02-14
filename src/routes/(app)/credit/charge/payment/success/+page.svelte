@@ -52,11 +52,11 @@
 </script>
 
 <div class="container my-4 space-y-4">
-	<div class="card-body bg-base-100">
-    <h2>결제 성공</h2>
-    <p>{_orderId}</p>
-    <p>{_amount}</p>
-    <p>{_paymentKey}</p>
-		<a class="btn btn-primary mt-3" href="/credit">돌아가기</a>
+	<div class="card-body bg-base-100 dark:bg-gray-800">
+    <h1>결제 성공</h1>
+    <p class="text-primary-dark dark:text-primary">주문번호 : {_orderId}</p>
+    <p class="text-primary-dark dark:text-primary">충전금액 : {_amount}</p>
+    <p class="text-primary-dark dark:text-primary">결제키 : {_paymentKey}</p>
+		<a class="btn dark:btn-primary hover:btn-primary dark:hover:btn-ghost mt-3" href="/credit">돌아가기</a>
 	</div>
 </div>

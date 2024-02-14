@@ -24,7 +24,8 @@
 				?.split('=')[1];
 
 			if (!accessToken) {
-				toastWarning('AccessToken이 없습니다.');
+				toastWarning('로그인 해주세요.');
+				return; 
 			}
 
 			try {
@@ -54,12 +55,12 @@
 	});
 </script>
 
-<div class="container bg-base-100 my-4 w-full">
+<div class="container bg-base-100 dark:bg-gray-800 my-4 w-full">
 	<div class="card card-body">
 		<form id="articleForm">
 			<div class="mt-5">
-				<label for="category">카테고리</label>
-				<select class="select select-bordered w-full max-w-xs ms-2" name="category" required>
+				<label class="text-primary-dark dark:text-primary" for="category">카테고리</label>
+				<select class="select select-bordered w-full max-w-xs text-primary-dark dark:text-primary bg-base-200 dark:bg-gray-600 ms-2" name="category" required>
 					<option value="" disabled selected>카테고리를 선택하세요</option>
 					<option value="공지사항">공지사항</option>
 					<option value="홍보">홍보</option>
@@ -67,20 +68,20 @@
 				</select>
 			</div>
 			<div class="mt-5">
-				<label for="title">제목</label>
+				<label class="text-primary-dark dark:text-primary" for="title">제목</label>
 				<input
 					type="text"
 					name="title"
 					id="title"
-					class="input input-bordered w-10/12 max-w-xs ms-10"
+					class="input input-bordered w-10/12 max-w-xs text-primary-dark dark:text-primary bg-base-200 dark:bg-gray-600 ms-10"
 					placeholder="제목을 입력하세요"
 					required
 				/>
 			</div>
 			<div class="flex items-center mt-5">
-				<label for="content">내용</label>
+				<label class="text-primary-dark dark:text-primary" for="content">내용</label>
 				<textarea
-					class="textarea textarea-bordered w-8/12 ms-11"
+					class="textarea textarea-bordered w-8/12 text-primary-dark dark:text-primary bg-base-200 dark:bg-gray-600 ms-11"
 					name="content"
 					id="content"
 					placeholder="내용을 입력하세요"
@@ -89,7 +90,7 @@
         <input type="hidden" name="artistUsername" id="artistUsername" value={$page.params.username}>
 			</div>
 			<div class="flex justify-center">
-				<button class="btn btn-success mt-5" type="submit">작성완료</button>
+				<button class="btn dark:btn-primary hover:btn-primary dark:hover:btn-ghost mt-5" type="submit">작성완료</button>
 			</div>
 		</form>
 	</div>

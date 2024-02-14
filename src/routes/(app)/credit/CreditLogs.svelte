@@ -3,10 +3,10 @@
 	export let creditLogs: any[] = [];
 </script>
 
-<div class="card bg-base-100 p-4">
-<p class="text-3xl font-extrabold mb-3">크레딧 내역</p>
+<div class="card bg-base-100 dark:bg-gray-800 p-4">
+<p class="text-3xl text-primary-dark dark:text-primary font-extrabold mb-3">크레딧 내역</p>
 <table class="table">
-	<thead class="bg-gray-200 text-center text-base font-bold">
+	<thead class="bg-gray-200 dark:bg-gray-600 text-center text-primary-dark dark:text-primary text-lg font-bold">
 		<tr>
 			<th>날짜</th>
 			<th>이벤트 타입</th>
@@ -14,7 +14,7 @@
 			<th>잔여 크레딧</th>
 		</tr>
 	</thead>
-	<tbody class="text-center">
+	<tbody class="text-center text-primary-dark dark:text-primary">
 		{#each creditLogs as log}
 			<tr>
 				<td>{new Date(log.createDate).toLocaleDateString('ko-KR')}</td>
