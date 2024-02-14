@@ -84,7 +84,7 @@
 					{/if}
 				</h1>
 				{#if followCheck === true}
-					<a class="btn btn-ghost text-gray-light" on:click={unfollow}><i class="fa-solid fa-user-minus"></i></a>
+					<a class="btn btn-ghost text-gray-light" on:click={unfollow}><i class="fa-solid fa-user-minus"></i>언팔로우</a>
 				{:else}
 					<a class="btn btn-ghost text-gray-light" on:click={follow}><i class="fa-solid fa-user-plus"></i>팔로우</a>
 				{/if}
