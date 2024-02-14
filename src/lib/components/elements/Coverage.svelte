@@ -1,5 +1,13 @@
 <script lang="ts">
 	export let album: object;
+	let imagePath = album.imgPath;
+
+	// imgPath가 null이면 기본 이미지 주소로 설정
+	$: {
+		if (!imagePath) {
+			imagePath = 'https://kv6d2rdb2209.edge.naverncp.com/GSctnLFiOr/defaultimage.jpg?type=f&w=300&h=300&ttype=jpg';
+		}
+	}
 </script>
 
 <header class="relative">
@@ -15,7 +23,7 @@
 
 	<img
 		alt="Albums"
-		src="{album.imgPath}"
+		src="{imagePath}"
 		class="h-52 xs:h-64 w-full object-cover rounded"
 	/>
 </header>

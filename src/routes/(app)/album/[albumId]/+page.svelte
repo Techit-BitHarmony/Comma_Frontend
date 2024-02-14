@@ -31,7 +31,7 @@
 
 
 		if (!response.ok) {
-			toastWarning("앨범 정보를 불러오는데 실패했습니다.");
+			toastWarning(responseData.message);
 			await goto("/");
 			return;
 		}

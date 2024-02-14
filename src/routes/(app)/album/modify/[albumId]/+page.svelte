@@ -28,23 +28,23 @@
                 method: 'GET'
             });
 
+            const albumResponseData = await albumResponse.json();
+            const memberResponseData = await memberResponse.json();
+
             if (!memberResponse.ok) {
-                toastWarning("로그인이 필요한 서비스입니다.");
+                toastWarning(memberResponseData.message);
                 await goto("/");
                 return;
             }
 
             if (!albumResponse.ok) {
-                toastWarning("앨범 정보를 불러오는데 실패했습니다.");
+                toastWarning(albumResponseData.message);
                 await goto("/");
                 return;
             }
 
-            const albumResponseData = await albumResponse.json();
-            const memberResponseData = await memberResponse.json();
-
             if(albumResponseData.data.artistUsername !== memberResponseData.data.username) {
-                toastWarning("본인의 앨범만 수정할 수 있습니다.");
+                toastWarning(albumResponseData.message);
                 await goto("/");
                 return;
             }
