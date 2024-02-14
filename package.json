@@ -34,7 +34,7 @@
 		"prettier": "^2.8.0",
 		"prettier-plugin-svelte": "^2.8.1",
 		"sass": "^1.53.0",
-		"svelte": "^3.54.0",
+		"svelte": "^5.0.0-next.1",
 		"svelte-check": "^3.0.1",
 		"svelte-preprocess": "^4.10.7",
 		"tailwindcss": "^3.1.5",
@@ -45,6 +45,8 @@
 		"vitest": "^0.25.3"
 	},
 	"dependencies": {
+		"daisyui": "^4.6.2",
+		"hls.js": "^1.5.4",
 		"toastr": "^2.1.4",
 		"zod": "^3.21.4",
 		"zod-form-data": "^2.0.1"

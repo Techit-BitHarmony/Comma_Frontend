@@ -2,7 +2,7 @@
 	import type { PageData } from './$types';
 	import Cover from '$components/elements/Cover.svelte';
 	import Artist from '$components/elements/Artist.svelte';
-	import Header from '$components/elements/Header.svelte';
+	import Header from '$components/elements/ArtistHeader.svelte';
 	import List from '$components/elements/List.svelte';
 
 	export let data: PageData;
