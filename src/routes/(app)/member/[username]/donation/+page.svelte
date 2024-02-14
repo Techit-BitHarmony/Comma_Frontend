@@ -51,7 +51,7 @@
                 credentials: 'include',
                 body: JSON.stringify(donation_regular_request),
             }).then((res) => res.json());
-            toastNotice(response.data);
+            toastNotice(response.message);
         } else {
             let response = await fetch($baseUrl + `/donation/once`, {
                 headers: {
@@ -62,7 +62,7 @@
                 credentials: 'include',
                 body: JSON.stringify(donation_request),
             }).then((res) => res.json());
-            toastNotice(response.data);
+            toastNotice(response.message);
         }
     }
 
