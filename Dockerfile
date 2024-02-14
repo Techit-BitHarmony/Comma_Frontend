@@ -6,6 +6,7 @@ WORKDIR /app
 
 # 의존성 파일 복사
 COPY package.json package-lock.json ./
+COPY yarn.lock .
 
 # 의존성 설치
 RUN npm install --force --legacy-peer-deps
@@ -13,8 +14,8 @@ RUN npm install --force --legacy-peer-deps
 # 애플리케이션 소스 복사
 COPY . .
 
-## SvelteKit 애플리케이션 빌드
-#RUN vite run build
+# SvelteKit 애플리케이션 빌드
+RUN vite run build
 
 # 2단계: 실행 환경 설정
 FROM node:18-alpine
