@@ -56,10 +56,11 @@
             permitChecked = albumResponseData.data.permit;
             price = albumResponseData.data.price;
 
+            if(albumResponseData.data.imgPath !== null) document.getElementById('albumCover').src = albumResponseData.data.imgPath;
+
             document.getElementById('albumname').value = albumname;
             document.getElementById('license').checked = licenseChecked;
             document.getElementById('permit').checked = permitChecked;
-            document.getElementById('albumCover').src = albumResponseData.data.imgPath;
 
             const genreElement = document.getElementById('genre');
             if (genreElement && genreElement instanceof HTMLSelectElement) {
