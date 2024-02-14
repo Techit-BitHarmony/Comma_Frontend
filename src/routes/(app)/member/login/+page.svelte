@@ -41,15 +41,18 @@
       }
 
       const responseData = await response.json();
-      const { username, accessToken, refreshToken } = responseData.data;
+      const { username, memberId, accessToken, refreshToken } = responseData.data;
 
       setTokenCookie('accessToken', accessToken, 1);
       setTokenCookie('refreshToken', refreshToken, 24 * 7);
 
       loginUsername.update(store => {
         store = username;
-      return store;}
-  )
+        return store;
+      })
+
+      localStorage.setItem('username', username);
+      localStorage.setItem('memberId', memberId);
 
       checkAccessToken();
       // await goto("/");
