@@ -114,19 +114,11 @@
             <form>
                 <div class="flex flex-col m-5">
                     <label for="text" class="form-label">후원자 명</label>
-<<<<<<< HEAD
                     <input class="input input-bordered dark:input-primary bg-gray-light dark:bg-gray-dark dark:text-gray-500 mt-3 max-w-full"
                            name="username" id="username" type="text" placeholder={username} disabled
                            bind:value={donation_request.patronName}/>
                     <label class="cursor-pointer label">
                         <span class="label-text dark:text-white">익명 설정</span>
-=======
-                    <input class="input input-bordered dark:input-primary bg-gray-light dark:bg-gray-dark mt-3 max-w-full"
-                           name="username" id="username" type="text" placeholder={username} disabled
-                           bind:value={donation_request.patronName}/>
-                    <label class="cursor-pointer label">
-                        <span class="label-text">익명 설정</span>
->>>>>>> e423373 (Donation-front#1 (#5))
                         <input type="checkbox" class="checkbox checkbox-success"
                                bind:checked={donation_request.anonymous}/>
                     </label>
