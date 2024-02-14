@@ -29,6 +29,7 @@
 	"/(app)/member/[username]/community/write": [],
 	"/(app)/member/[username]/donation": [],
 	"/(app)/member/[username]/donation/list": [],
+	"/(app)/member/[username]/donation/update": [],
 	"/(app)/member/[username]/modify": [],
 	"/(app)/member/[username]/modify/password": [],
 	"/(app)/search": [

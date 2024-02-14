@@ -2,7 +2,12 @@
 	import { onMount } from 'svelte';
 	import { writable } from 'svelte/store';
 	import { page } from '$app/stores';
-	import { goto } from '$app/navigation'
+	import { goto } from '$app/navigation';
+	import { loginUsername } from '$components/store.js';
+	import { baseUrl } from '$components/store.js';
+	import { toastNotice } from '$components/toastr';
+	import { toastWarning } from '$components/toastr';
+	import { getCookie } from '$components/token.js';
 	import CommentList from './CommentList.svelte';
 	import DeleteButton from './DeleteButton.svelte';
 
@@ -18,20 +23,17 @@
 
 	async function loadArticles() {
 		try {
-			const accessToken = document.cookie
-				.split('; ')
-				.find((row) => row.startsWith('accessToken='))
-				?.split('=')[1];
+			const accessToken = getCookie('accessToken');
 
 			if (!accessToken) {
-				throw new Error('AccessToken이 없습니다.');
+				toastWarning('로그인 해주세요.');
 			}
 
-			// 현재 페이지와 페이지당 항목 수를 기반으로 데이터를 가져옵니다.
 			const response = await fetch(
-				`http://localhost:8090/community/articles/user/${$page.params.username}?page=${$currentPage}`,
+				$baseUrl + `/community/articles/user/${$page.params.username}?page=${$currentPage}`,
 				{
 					method: 'GET',
+					credentials: 'include',
 					headers: {
 						'Content-Type': 'application/json',
 						Authorization: `${accessToken}`
@@ -39,18 +41,19 @@
 				}
 			);
 
+			const resp = await response.json();
+
 			if (!response.ok) {
-				throw new Error('네트워크 오류: ' + response.statusText);
+				toastWarning(resp.message);
 			}
 
-			const resp = await response.json();
 			articles.set(resp.data.articleList.content);
 
 			const totalArticles = resp.data.articleList.totalElements;
 			totalElements = totalArticles;
 			totalPages.set(Math.ceil(totalArticles / itemsPerPage));
 		} catch (error) {
-			console.error('데이터를 가져오는 중 오류 발생:', error);
+			toastWarning('글 목록을 불러오는 데 실패하였습니다.');
 		}
 	}
 
@@ -82,17 +85,15 @@
 		const content = form.elements['content'].value;
 
 		try {
-			const accessToken = document.cookie
-				.split('; ')
-				.find((row) => row.startsWith('accessToken='))
-				?.split('=')[1];
+			const accessToken = getCookie('accessToken');
 
 			if (!accessToken) {
-				throw new Error('AccessToken이 없습니다.');
+				toastWarning('로그인 해주세요.');
 			}
 
-			const response = await fetch('http://localhost:8090/community/comments', {
+			const response = await fetch($baseUrl + '/community/comments', {
 				method: 'POST',
+				credentials: 'include',
 				headers: {
 					'Content-Type': 'application/json',
 					Authorization: `${accessToken}`
@@ -100,15 +101,18 @@
 				body: JSON.stringify({ articleId, content })
 			});
 
+			const resp = await response.json(); 
+
 			if (!response.ok) {
-				throw new Error('네트워크 오류: ' + response.statusText);
+				toastWarning(resp.message);
 			}
 
+			location.reload();
 			scrollToArticle(articleId);
 			form.reset();
-			location.reload();
+
 		} catch (error) {
-			console.error('댓글을 작성하는 중 오류 발생:', error);
+			toastWarning('댓글 작성에 실패하였습니다.');
 		}
 	}
 </script>
@@ -120,9 +124,9 @@
 	</div>
 
 	{#if $articles.length === 0}
-	<div class="flex justify-center">
-		<h2>등록된 게시글이 없습니다.</h2>
-	</div>
+		<div class="flex justify-center">
+			<h2>등록된 게시글이 없습니다.</h2>
+		</div>
 	{/if}
 	{#each $articles as article, index}
 		<div class="card w-auto bg-base-100 shadow-xl">
@@ -143,15 +147,17 @@
 							>
 						</div>
 					</div>
+					{#if $loginUsername === article.username}
 					<div class="dropdown">
 						<div tabindex="0" role="button" class="btn btm-xs">. . .</div>
 						<ul class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52">
-							<li><a href='./community/modify?articleId={article.id}'>수정하기</a></li>
+							<li><a href="./community/modify?articleId={article.id}">수정하기</a></li>
 							<li><DeleteButton articleId={article.id} /></li>
 						</ul>
 					</div>
+					{/if}
 				</div>
-				<div class="divider divider-neutral"></div>
+				<div class="divider divider-neutral" />
 				<p>{article.content}</p>
 				<div class="divider mt-20">댓글</div>
 
@@ -180,9 +186,8 @@
 	{/each}
 
 	<div class="join flex justify-center">
-		
 		{#if $totalPages > 0}
-		<button class="join-item btn btn-square" on:click={previousPage}>이전</button>
+			<button class="join-item btn btn-square" on:click={previousPage}>이전</button>
 		{/if}
 		{#each Array.from({ length: $totalPages }, (_, index) => index + 1) as pageNumber}
 			{#if pageNumber === $currentPage}
@@ -196,7 +201,7 @@
 			{/if}
 		{/each}
 		{#if $totalPages > 0}
-		<button class="join-item btn btn-square" on:click={nextPage}>다음</button>
+			<button class="join-item btn btn-square" on:click={nextPage}>다음</button>
 		{/if}
 	</div>
 </div>

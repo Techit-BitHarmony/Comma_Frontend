@@ -1,0 +1,1 @@
+export { default as component } from "../../../../src/routes/(legal)/imprint/+page.md";

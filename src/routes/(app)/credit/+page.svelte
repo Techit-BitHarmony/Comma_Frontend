@@ -71,7 +71,7 @@
 		<div>
 			<a href="/credit/charge" class="btn bg-base-200 btn-wide">충전하기</a>
 			<a href="/credit/withdraw/?restCredit={restCredit}" class="btn bg-base-200 btn-wide">출금하기</a>
-			{#if $loginUsername === '프로필'}
+			{#if $loginUsername === 'admin'}
 			<a href="/credit/withdraw/admin" class="btn bg-warning">관리자 페이지</a>
 			{/if}
 		</div>

@@ -13,7 +13,7 @@
 
 	onMount(async () => {
 
-    if ($loginUsername !== '프로필') {
+    if ($loginUsername !== 'admin') {
       toastWarning('접근 권한이 없습니다.')
       await goto('/credit')
     }

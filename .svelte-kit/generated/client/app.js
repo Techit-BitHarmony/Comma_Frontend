@@ -26,7 +26,8 @@ export const nodes = [
 	() => import('./nodes/22'),
 	() => import('./nodes/23'),
 	() => import('./nodes/24'),
-	() => import('./nodes/25')
+	() => import('./nodes/25'),
+	() => import('./nodes/26')
 ];
 
 export const server_loads = [];
@@ -43,7 +44,7 @@ export const dictionary = {
 		"/(app)/credit/charge/payment/success": [10],
 		"/(app)/credit/withdraw": [11],
 		"/(app)/credit/withdraw/admin": [12],
-		"/(legal)/imprint": [25],
+		"/(legal)/imprint": [26],
 		"/(app)/member/join": [13],
 		"/(app)/member/login": [14],
 		"/(app)/member/[username]": [~15],
@@ -53,9 +54,10 @@ export const dictionary = {
 		"/(app)/member/[username]/community/write": [19],
 		"/(app)/member/[username]/donation": [20],
 		"/(app)/member/[username]/donation/list": [21],
-		"/(app)/member/[username]/modify": [22],
-		"/(app)/member/[username]/modify/password": [23],
-		"/(app)/search": [~24]
+		"/(app)/member/[username]/donation/update": [22],
+		"/(app)/member/[username]/modify": [23],
+		"/(app)/member/[username]/modify/password": [24],
+		"/(app)/search": [~25]
 	};
 
 export const hooks = {
