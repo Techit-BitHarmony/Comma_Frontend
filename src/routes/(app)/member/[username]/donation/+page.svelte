@@ -51,7 +51,12 @@
                 credentials: 'include',
                 body: JSON.stringify(donation_regular_request),
             }).then((res) => res.json());
-            toastNotice(response.message);
+            if(response.resultCode==200){
+                toastNotice(response.data);
+            } else{
+                toastNotice(response.message);
+            }
+            await goto('/');
         } else {
             let response = await fetch($baseUrl + `/donation/once`, {
                 headers: {
@@ -62,7 +67,12 @@
                 credentials: 'include',
                 body: JSON.stringify(donation_request),
             }).then((res) => res.json());
-            toastNotice(response.message);
+            if(response.resultCode==200){
+                toastNotice(response.data);
+            } else{
+                toastNotice(response.message);
+            }
+            await goto('/');
         }
     }
 
@@ -104,11 +114,11 @@
             <form>
                 <div class="flex flex-col m-5">
                     <label for="text" class="form-label">후원자 명</label>
-                    <input class="input input-bordered dark:input-primary bg-gray-light dark:bg-gray-dark mt-3 max-w-full"
+                    <input class="input input-bordered dark:input-primary bg-gray-light dark:bg-gray-dark dark:text-gray-500 mt-3 max-w-full"
                            name="username" id="username" type="text" placeholder={username} disabled
                            bind:value={donation_request.patronName}/>
                     <label class="cursor-pointer label">
-                        <span class="label-text">익명 설정</span>
+                        <span class="label-text dark:text-white">익명 설정</span>
                         <input type="checkbox" class="checkbox checkbox-success"
                                bind:checked={donation_request.anonymous}/>
                     </label>
