@@ -49,6 +49,7 @@
 	"dependencies": {
 		"@tosspayments/payment-widget-sdk": "^0.10.2",
 		"daisyui": "^4.6.2",
+		"hls.js": "^1.5.5",
 		"toastr": "^2.1.4",
 		"zod": "^3.22.4",
 		"zod-form-data": "^2.0.2"
