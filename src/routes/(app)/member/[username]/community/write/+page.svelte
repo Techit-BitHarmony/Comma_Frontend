@@ -59,7 +59,7 @@
 	<div class="card card-body">
 		<form id="articleForm">
 			<div class="mt-5">
-				<label class="text-primary-dark dark:text-primary" for="category">카테고리</label>
+				<label class="text-primary-dark dark:text-primary" for="category"><i class="fa-solid fa-list me-3"></i>카테고리</label>
 				<select class="select select-bordered w-full max-w-xs text-primary-dark dark:text-primary bg-base-200 dark:bg-gray-600 ms-2" name="category" required>
 					<option value="" disabled selected>카테고리를 선택하세요</option>
 					<option value="공지사항">공지사항</option>
@@ -68,7 +68,7 @@
 				</select>
 			</div>
 			<div class="mt-5">
-				<label class="text-primary-dark dark:text-primary" for="title">제목</label>
+				<label class="text-primary-dark dark:text-primary" for="title"><i class="fa-solid fa-heading me-3"></i>제목</label>
 				<input
 					type="text"
 					name="title"
@@ -79,7 +79,7 @@
 				/>
 			</div>
 			<div class="flex items-center mt-5">
-				<label class="text-primary-dark dark:text-primary" for="content">내용</label>
+				<label class="text-primary-dark dark:text-primary" for="content"><i class="fa-solid fa-message me-3"></i>내용</label>
 				<textarea
 					class="textarea textarea-bordered w-8/12 text-primary-dark dark:text-primary bg-base-200 dark:bg-gray-600 ms-11"
 					name="content"

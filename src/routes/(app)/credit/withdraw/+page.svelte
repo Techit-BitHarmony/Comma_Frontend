@@ -54,16 +54,16 @@
 	});
 </script>
 
-<div class="container bg-base-100 my-4 w-full">
+<div class="container bg-base-100 dark:bg-gray-800 my-4 w-full">
 	<div class="card card-body">
 		<div>
-			<p class="font-extrabold text-3xl mb-3">출금 신청</p>
+			<p class="font-extrabold text-primary-dark dark:text-primary text-3xl mb-3">출금 신청</p>
 		</div>
 		<form id="withdrawForm">
 			<div class="mt-5">
-				<label for="bankName" class="me-2">은행명 </label>
+				<label for="bankName" class="text-primary-dark dark:text-primary me-2"><i class="fa-solid fa-building-columns me-3"></i>은행명 </label>
 				<select
-					class="select select-bordered w-full max-w-xs ms-12"
+					class="select select-bordered w-full max-w-xs bg-base-100 dark:bg-gray-600 text-primary-dark dark:text-primary ms-12"
 					name="bankName"
 					id="bankName"
 					required
@@ -76,9 +76,9 @@
 				</select>
 			</div>
 			<div class="mt-5">
-				<label for="bankAccountNo">계좌번호 </label>
+				<label class="text-primary-dark dark:text-primary" for="bankAccountNo"><i class="fa-solid fa-money-check-dollar me-3"></i> 계좌번호 </label>
 				<input
-					class="input input-bordered w-10/12 max-w-xs ms-10"
+					class="input input-bordered w-10/12 max-w-xs bg-base-100 dark:bg-gray-600 ms-10"
 					type="text"
 					name="bankAccountNo"
 					id="bankAccountNo"
@@ -87,9 +87,9 @@
 				/>
 			</div>
 			<div class="mt-5">
-				<label for="withdrawAmount">출금신청액 </label>
+				<label class="text-primary-dark dark:text-primary" for="withdrawAmount"><i class="fa-solid fa-sack-dollar me-3"></i>출금신청액 </label>
 				<input
-					class="input input-bordered w-10/12 max-w-xs ms-6"
+					class="input input-bordered w-10/12 max-w-xs bg-base-100 dark:bg-gray-600 ms-6"
 					type="text"
 					name="withdrawAmount"
 					id="withdrawAmount"
@@ -98,7 +98,7 @@
 				/>
 			</div>
 			<div class="flex justify-center">
-				<button class="btn btn-success mt-5" type="submit">출금 신청하기</button>
+				<button class="btn dark:btn-primary hover:btn-primary dark:hover:btn-ghost mt-5" type="submit"><i class="fa-solid fa-check"></i>출금 신청하기</button>
 			</div>
 		</form>
 	</div>

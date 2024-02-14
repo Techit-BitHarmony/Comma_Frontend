@@ -51,10 +51,12 @@
 <div class="container my-4 space-y-4">
 	<div class="card-body bg-base-100 dark:bg-gray-800">
 		<form id="chargeForm">
-			<div class="flex-auto">
-				<label class="label text-2xl text-primary-dark dark:text-primary font-bold mb-2" for="chargeAmount">크레딧 충전</label>
+			<div class="flex">
+				<label class="label text-2xl text-primary-dark dark:text-primary font-bold mb-2" for="chargeAmount"><i class="fa-solid fa-bolt me-3"></i>크레딧 충전</label>
+				</div>
+				<div>
 				<select
-					class="select select-bordered w-full max-w-xs text-primary-dark dark:text-primary mb-3"
+					class="select select-bordered w-full max-w-xs text-primary-dark dark:text-primary mb-5"
 					name="chargeAmount"
 					id="chargeAmount"
 					required

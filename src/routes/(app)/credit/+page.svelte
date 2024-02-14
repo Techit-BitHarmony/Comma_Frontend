@@ -65,12 +65,12 @@
 <div class="container my-10 space-y-4">
 	<div class="card bg-base-100 dark:bg-gray-800 p-2">
 		<div class="flex ms-3 mb-3">
-			<p class="text-3xl text-primary-dark dark:text-primary font-extrabold me-3">현재 크레딧 :</p>
+			<p class="text-3xl text-primary-dark dark:text-primary font-extrabold me-3"><i class="fa-solid fa-coins me-1"></i> 현재 크레딧 :</p>
 			<p class="text-3xl text-primary-dark dark:text-primary font-extrabold me-3">{restCredit}</p>
 		</div>
 		<div>
-			<a href="/credit/charge" class="btn dark:btn-primary hover:btn-primary dark:hover:btn-ghost btn-wide">충전하기</a>
-			<a href="/credit/withdraw/?restCredit={restCredit}" class="btn dark:btn-primary hover:btn-primary dark:hover:btn-ghost btn-wide">출금하기</a>
+			<a href="/credit/charge" class="btn dark:btn-primary hover:btn-primary dark:hover:btn-ghost btn-wide"><i class="fa-solid fa-bolt me-2"></i> 충전하기</a>
+			<a href="/credit/withdraw/?restCredit={restCredit}" class="btn dark:btn-primary hover:btn-primary dark:hover:btn-ghost btn-wide"><i class="fa-solid fa-money-bill-transfer me-2"></i>출금하기</a>
 			{#if $loginUsername === 'admin'}
 			<a href="/credit/withdraw/admin" class="btn btn-warning dark:btn-error">관리자 페이지</a>
 			{/if}

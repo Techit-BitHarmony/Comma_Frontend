@@ -4,7 +4,7 @@
 </script>
 
 <div class="card bg-base-100 dark:bg-gray-800 p-4">
-	<p class="text-3xl text-primary-dark dark:text-primary font-extrabold mb-3">출금 신청 내역</p>
+	<p class="text-3xl text-primary-dark dark:text-primary font-extrabold mb-3"><i class="fa-solid fa-wallet me-3"></i>출금 신청 내역</p>
 	<table class="table">
 		<thead class="bg-gray-200 dark:bg-gray-600 text-center text-primary-dark dark:text-primary text-lg font-bold">
 			<tr>

@@ -122,11 +122,11 @@
 
 <div class="container my-4 space-y-4">
 	<div class="flex justify-between items-center my-6 mb-4">
-		<h1>{$page.params.username}님의 게시판</h1>
+		<h1>{$page.params.username}님의 게시판<i class="fa-solid fa-compact-disc ms-3"></i></h1>
 		{#if $isLogin === true}
 			<a
 				class="btn dark:btn-primary hover:btn-primary dark:hover:btn-ghost"
-				href="./community/write">글쓰기</a
+				href="./community/write"><i class="fa-solid fa-pen-to-square"></i>글쓰기</a
 			>
 		{/if}
 	</div>
@@ -136,7 +136,7 @@
 			''
 				? 'btn-disabled'
 				: ''}"
-			on:click={() => selectButton('')}>전체</button
+			on:click={() => selectButton('')}><i class="fa-solid fa-align-justify"></i>전체</button
 		>
 		<div class="divider divider-horizontal" />
 		<button
@@ -144,7 +144,7 @@
 			'공지사항'
 				? 'btn-disabled'
 				: ''}"
-			on:click={() => selectButton('공지사항')}>공지사항</button
+			on:click={() => selectButton('공지사항')}><i class="fa-solid fa-bullhorn"></i>공지사항</button
 		>
 		<div class="divider divider-horizontal" />
 		<button
@@ -152,7 +152,7 @@
 			'홍보'
 				? 'btn-disabled'
 				: ''}"
-			on:click={() => selectButton('홍보')}>홍보</button
+			on:click={() => selectButton('홍보')}><i class="fa-solid fa-music"></i>홍보</button
 		>
 		<div class="divider divider-horizontal" />
 		<button
@@ -160,7 +160,7 @@
 			'소통'
 				? 'btn-disabled'
 				: ''}"
-			on:click={() => selectButton('소통')}>소통</button
+			on:click={() => selectButton('소통')}><i class="fa-solid fa-comments"></i>소통</button
 		>
 	</div>
 
@@ -203,7 +203,7 @@
 								<li>
 									<a
 										class="text-primary-dark dark:text-primary font-extrabold"
-										href="./community/modify?articleId={article.id}">수정하기</a
+										href="./community/modify?articleId={article.id}"><i class="fa-solid fa-hammer"></i>수정하기</a
 									>
 								</li>
 								<li><DeleteButton articleId={article.id} /></li>
@@ -217,7 +217,7 @@
 
 				<details class="collapse bg-base-200">
 					<summary class="collapse-title bg-base-200 dark:bg-gray-600 text-sm font-medium"
-						>댓글 작성하기</summary
+						><i class="fa-regular fa-note-sticky me-3"></i>댓글 작성하기</summary
 					>
 					<div class="collapse-content bg-base-200 dark:bg-gray-600">
 						<form id="commentForm" on:submit={submitComment}>

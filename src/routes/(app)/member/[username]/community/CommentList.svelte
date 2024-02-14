@@ -115,7 +115,7 @@
 <div class="card-body">
 	{#each comments as comment}
 		<div class="flex justify-between items-center">
-			<h5 class="card-title text-primary-dark dark:text-primary">{comment.username}</h5>
+			<h5 class="card-title text-primary-dark dark:text-primary"><i class="fa-solid fa-user"></i>{comment.username}</h5>
 			<span class="badge dark:badge-primary ml-2"
 				>{new Date(comment.createDate).toLocaleDateString('ko-KR', {
 					year: 'numeric',
@@ -136,10 +136,10 @@
 				<p class="text-primary-dark dark:text-primary ms-5">{comment.content}</p>
 				{#if $loginUsername === comment.username}
 					<button class="btn dark:btn-primary hover:btn-primary dark:hover:btn-ghost btn-xs" on:click={() => startEdit(comment.commentId)}
-						>수정</button
+						><i class="fa-solid fa-hammer"></i>수정</button
 					>
 					<button class="btn dark:btn-primary hover:btn-primary dark:hover:btn-ghost btn-xs" on:click={() => deleteComment(comment.commentId)}
-						>삭제</button
+						><i class="fa-solid fa-trash"></i>삭제</button
 					>
 				{/if}
 			{/if}
