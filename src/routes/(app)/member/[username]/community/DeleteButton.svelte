@@ -24,6 +24,7 @@
                 throw new Error('네트워크 오류: ' + response.statusText);
             }
 
+            alert('글 삭제 성공')
 			location.reload();
             
         } catch (error) {

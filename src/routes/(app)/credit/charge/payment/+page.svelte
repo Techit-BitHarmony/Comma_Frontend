@@ -43,9 +43,7 @@ onMount(async () => {
     });
 </script>
 
-<div>
-  <h1>페이지 제목</h1>
-  <h1>{chargeId}</h1>
+<div class="card bg-base-200">
   {#if username && chargeAmount && chargeCode}
     <PaymentComponent username={username} chargeAmount={chargeAmount} chargeCode={chargeCode}  />
   {:else}

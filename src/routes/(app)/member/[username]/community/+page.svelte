@@ -118,6 +118,11 @@
 		<a class="btn btn-primary" href="./community/write">글쓰기</a>
 	</div>
 
+	{#if $articles.length === 0}
+	<div class="flex justify-center">
+		<h2>등록된 게시글이 없습니다.</h2>
+	</div>
+	{/if}
 	{#each $articles as article, index}
 		<div class="card w-auto bg-base-100 shadow-xl">
 			<div class="card-body">
@@ -174,7 +179,10 @@
 	{/each}
 
 	<div class="join flex justify-center">
+		
+		{#if $totalPages > 0}
 		<button class="join-item btn btn-square" on:click={previousPage}>이전</button>
+		{/if}
 		{#each Array.from({ length: $totalPages }, (_, index) => index + 1) as pageNumber}
 			{#if pageNumber === $currentPage}
 				<button class="join-item btn btn-square btn-active" on:click={() => movePage(pageNumber)}
@@ -186,6 +194,8 @@
 				>
 			{/if}
 		{/each}
+		{#if $totalPages > 0}
 		<button class="join-item btn btn-square" on:click={nextPage}>다음</button>
+		{/if}
 	</div>
 </div>

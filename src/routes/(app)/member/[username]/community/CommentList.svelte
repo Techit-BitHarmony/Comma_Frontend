@@ -40,33 +40,33 @@
 	}
 
 	async function deleteComment(commentId) {
-			const accessToken = document.cookie
-				.split('; ')
-				.find((row) => row.startsWith('accessToken='))
-				?.split('=')[1];
+		const accessToken = document.cookie
+			.split('; ')
+			.find((row) => row.startsWith('accessToken='))
+			?.split('=')[1];
 
-			if (!accessToken) {
-				throw new Error('AccessToken이 없습니다.');
-			}
+		if (!accessToken) {
+			throw new Error('AccessToken이 없습니다.');
+		}
 
-			try {
-				const response = await fetch(`http://localhost:8090/community/comments/${commentId}`, {
-					method: 'DELETE',
-					headers: {
-						'Content-Type': 'application/json',
-						Authorization: `${accessToken}`
-					}
-				});
-
-				if (!response.ok) {
-					throw new Error('네트워크 오류: ' + response.statusText);
+		try {
+			const response = await fetch(`http://localhost:8090/community/comments/${commentId}`, {
+				method: 'DELETE',
+				headers: {
+					'Content-Type': 'application/json',
+					Authorization: `${accessToken}`
 				}
+			});
 
-				alert('댓글 삭제 성공');
-				location.reload();
-			} catch (error) {
-				console.error('댓글 삭제 오류:', error);
+			if (!response.ok) {
+				throw new Error('네트워크 오류: ' + response.statusText);
 			}
+
+			alert('댓글 삭제 성공');
+			location.reload();
+		} catch (error) {
+			console.error('댓글 삭제 오류:', error);
+		}
 	}
 </script>
 
@@ -86,7 +86,10 @@
 		</div>
 		<div class="flex justify-between">
 			<p class="ms-5">{comment.content}</p>
-			<button class="btn btn-outline btn-xs" on:click={() => deleteComment(comment.commentId)}>삭제</button>
+			<button class="btn btn-outline btn-xs" on:click={() => deleteComment(comment.commentId)}
+				>삭제</button
+			>
+			<button class="btn btn-outline btn-xs">수정</button>
 		</div>
 		<div class="border" />
 	{/each}

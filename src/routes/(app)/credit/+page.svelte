@@ -2,6 +2,8 @@
 	import { onMount } from 'svelte';
 	import CreditLogs from './CreditLogs.svelte';
 	import Withdraws from './Withdraws.svelte';
+	import { toastNotice } from '$components/toastr';
+	import { loginUsername } from "$components/store.js";
 
 	let restCredit = '';
 	let creditLogs: any[] = [];
@@ -55,14 +57,23 @@
 	});
 </script>
 
-<div class="container my-4 space-y-4">
-	<h1>잔여 크레딧: {restCredit}</h1>
-	<a href="/credit/charge" class="bg-primary">충전하기</a>
-	<a href="/credit/withdraw" class="bg-primary">출금하기</a>
+<div class="container my-10 space-y-4">
+	<div class="card bg-base-100 p-2">
+		<div class="flex ms-3 mb-3">
+			<p class="text-3xl font-extrabold me-3">현재 크레딧 :</p>
+			<p class="text-3xl font-extrabold me-3">{restCredit}</p>
+		</div>
+		<div>
+			<a href="/credit/charge" class="btn bg-base-200 btn-wide">충전하기</a>
+			<a href="/credit/withdraw/?restCredit={restCredit}" class="btn bg-base-200 btn-wide">출금하기</a>
+			{#if $loginUsername === 'admin'}
+			<a href="/credit/withdraw/admin" class="btn bg-warning">관리자 페이지</a>
+			{/if}
+		</div>
+	</div>
 
-	<h1>크레딧 내역</h1>
+	<div class="divider"></div>
 	<CreditLogs {creditLogs} />
-
-	<h1>출금 신청 내역</h1>
+	<div class="divider"></div>
 	<Withdraws {withdraws} />
 </div>
