@@ -3,28 +3,43 @@
 	import {baseUrl} from "$components/store";
 	import {getCookie} from "$components/token";
 	import {onMount} from "svelte";
+	import {toastWarning} from "$components/toastr";
 
 	$: ({ artistUsername } = $$restProps);
 	let followData = {};
 	$: followCheck = false;
 
 	async function follow() {
-		await fetch($baseUrl + `/follow/${artistUsername}`, {
+		const response = await fetch($baseUrl + `/follow/${artistUsername}`, {
 			method: 'POST',
 			headers: {
 				'Authorization': getCookie('accessToken'),
 			},
 		});
+
+		if (!response.ok) {
+			const errorData = await response.json();
+			toastWarning(errorData.message);
+			return;
+		}
+
 		followCheck = true;
 	}
 
 	async function unfollow() {
-		await fetch($baseUrl + `/follow/${artistUsername}`, {
+		const response = await fetch($baseUrl + `/follow/${artistUsername}`, {
 			method: 'DELETE',
 			headers: {
 				'Authorization': getCookie('accessToken'),
 			},
 		});
+
+		if (!response.ok) {
+			const errorData = await response.json();
+			toastWarning(errorData.message);
+			return;
+		}
+
 		followCheck = false;
 	}
 
