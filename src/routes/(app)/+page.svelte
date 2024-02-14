@@ -12,7 +12,7 @@
 		});
 
 		const responseData = await response.json();
-		newAlbums = responseData;
+		newAlbums = responseData.data;
 	}
 
 	onMount(() => {
@@ -32,3 +32,4 @@
 		{/each}
 	</div>
 </div>
+
