@@ -18,14 +18,22 @@
 	let itemsPerPage = 10;
 	let totalElements = '';
 
+	let selectedButton = ''; // 버튼 선택 상태를 추적하는 변수
+
+	function selectButton(category) {
+		selectedButton = category; // 버튼 클릭 시 선택 상태 업데이트
+		loadArticles(category);
+	}
+
 	onMount(async () => {
-		loadArticles();
+		loadArticles('');
 	});
 
-	async function loadArticles() {
+	async function loadArticles(category) {
 		try {
 			const response = await fetch(
-				$baseUrl + `/community/articles/user/${$page.params.username}?page=${$currentPage}`,
+				$baseUrl +
+					`/community/articles/user/${$page.params.username}?page=${$currentPage}&category=${category}`,
 				{
 					method: 'GET',
 					credentials: 'include',
@@ -116,8 +124,44 @@
 	<div class="flex justify-between items-center my-6 mb-4">
 		<h1>{$page.params.username}님의 게시판</h1>
 		{#if $isLogin === true}
-			<a class="btn dark:btn-primary hover:btn-primary dark:hover:btn-ghost" href="./community/write">글쓰기</a>
+			<a
+				class="btn dark:btn-primary hover:btn-primary dark:hover:btn-ghost"
+				href="./community/write">글쓰기</a
+			>
 		{/if}
+	</div>
+	<div class="flex">
+		<button
+			class="btn dark:btn-primary hover:btn-primary dark:hover:btn-ghost w-2/12 {selectedButton ===
+			''
+				? 'btn-disabled'
+				: ''}"
+			on:click={() => selectButton('')}>전체</button
+		>
+		<div class="divider divider-horizontal" />
+		<button
+			class="btn dark:btn-primary hover:btn-primary dark:hover:btn-ghost w-2/12 {selectedButton ===
+			'공지사항'
+				? 'btn-disabled'
+				: ''}"
+			on:click={() => selectButton('공지사항')}>공지사항</button
+		>
+		<div class="divider divider-horizontal" />
+		<button
+			class="btn dark:btn-primary hover:btn-primary dark:hover:btn-ghost w-2/12 {selectedButton ===
+			'홍보'
+				? 'btn-disabled'
+				: ''}"
+			on:click={() => selectButton('홍보')}>홍보</button
+		>
+		<div class="divider divider-horizontal" />
+		<button
+			class="btn dark:btn-primary hover:btn-primary dark:hover:btn-ghost w-2/12 {selectedButton ===
+			'소통'
+				? 'btn-disabled'
+				: ''}"
+			on:click={() => selectButton('소통')}>소통</button
+		>
 	</div>
 
 	{#if $articles.length === 0}
@@ -146,9 +190,22 @@
 					</div>
 					{#if $loginUsername === article.username}
 						<div class="dropdown">
-							<div tabindex="0" role="button" class="btn dark:btn-primary hover:btn-primary dark:hover:btn-ghost btm-xs">. . .</div>
-							<ul class="dropdown-content z-[1] menu p-2 shadow bg-base-100 dark:bg-gray-600 rounded-box w-52">
-								<li><a class="text-primary-dark dark:text-primary font-extrabold" href="./community/modify?articleId={article.id}">수정하기</a></li>
+							<div
+								tabindex="0"
+								role="button"
+								class="btn dark:btn-primary hover:btn-primary dark:hover:btn-ghost btm-xs"
+							>
+								. . .
+							</div>
+							<ul
+								class="dropdown-content z-[1] menu p-2 shadow bg-base-100 dark:bg-gray-600 rounded-box w-52"
+							>
+								<li>
+									<a
+										class="text-primary-dark dark:text-primary font-extrabold"
+										href="./community/modify?articleId={article.id}">수정하기</a
+									>
+								</li>
 								<li><DeleteButton articleId={article.id} /></li>
 							</ul>
 						</div>
@@ -159,7 +216,9 @@
 				<div class="divider dark:divider-accent mt-20">댓글</div>
 
 				<details class="collapse bg-base-200">
-					<summary class="collapse-title bg-base-200 dark:bg-gray-600 text-sm font-medium">댓글 작성하기</summary>
+					<summary class="collapse-title bg-base-200 dark:bg-gray-600 text-sm font-medium"
+						>댓글 작성하기</summary
+					>
 					<div class="collapse-content bg-base-200 dark:bg-gray-600">
 						<form id="commentForm" on:submit={submitComment}>
 							<div>
