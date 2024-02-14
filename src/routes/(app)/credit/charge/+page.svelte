@@ -1,25 +1,27 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-  import { toastNotice } from '$components/toastr';
+	import { getCookie } from '$components/token.js';
+	import { goto } from '$app/navigation';
+	import { baseUrl } from '$components/store.js';
+	import { toastNotice } from '$components/toastr';
+	import { toastWarning } from '$components/toastr';
 
 	onMount(() => {
 		const form = document.getElementById('chargeForm');
 
-		form.addEventListener('submit', async function (event) {
+		form?.addEventListener('submit', async function (event) {
 			event.preventDefault(); // 기본 제출 행동 방지
 			const chargeAmount = form.elements['chargeAmount'].value;
-			const accessToken = document.cookie
-				.split('; ')
-				.find((row) => row.startsWith('accessToken='))
-				?.split('=')[1];
+			const accessToken = getCookie('accessToken'); 
 
 			if (!accessToken) {
-				throw new Error('AccessToken이 없습니다.');
+				toastWarning('로그인 해주세요.');
 			}
 
 			try {
-				const response = await fetch('http://localhost:8090/credit/charges', {
+				const response = await fetch($baseUrl + `/credit/charges`, {
 					method: 'POST',
+					credentials: 'include',
 					headers: {
 						'Content-Type': 'application/json',
 						Authorization: `${accessToken}`
@@ -28,18 +30,19 @@
 				});
 
 				if (!response.ok) {
-					throw new Error('네트워크 오류: ' + response.statusText);
+					toastWarning('주문서 생성 실패');
+					return;
 				}
 
 				const resp = await response.json();
 				const chargeId = resp.chargeId;
 
-        alert('결제창으로 이동합니다.')
+				toastNotice('결제창으로 이동합니다.');
 
-				window.location.href = `/credit/charge/payment?chargeId=${chargeId}`;
+				await goto(`/credit/charge/payment?chargeId=${chargeId}`)
+
 			} catch (error) {
-				console.error('충전 오류:', error);
-				// 오류 메시지 표시 또는 사용자에게 다른 조치를 안내할 수 있습니다.
+				toastWarning(error);
 			}
 		});
 	});

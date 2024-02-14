@@ -1,0 +1,1 @@
+export { default as component } from "../../../../src/routes/(app)/credit/charge/+page.svelte";

@@ -1,0 +1,37 @@
+{
+	"/(app)": [
+		"src/routes/(app)/+page.server.ts"
+	],
+	"/": [],
+	"/(app)/album/modify/[albumId]": [],
+	"/(app)/album/release": [],
+	"/(app)/album/[albumId]": [
+		"src/routes/(app)/album/[albumId]/+page.server.ts"
+	],
+	"/(app)/credit": [],
+	"/(app)/credit/charge": [],
+	"/(app)/credit/charge/payment": [],
+	"/(app)/credit/charge/payment/fail": [],
+	"/(app)/credit/charge/payment/success": [],
+	"/(app)/credit/withdraw": [],
+	"/(app)/credit/withdraw/admin": [],
+	"/(legal)/imprint": [],
+	"/(app)/member/join": [],
+	"/(app)/member/login": [],
+	"/(app)/member/[username]": [
+		"src/routes/(app)/member/[username]/+page.server.ts"
+	],
+	"/(app)/member/[username]/albums": [
+		"src/routes/(app)/member/[username]/albums/+page.server.ts"
+	],
+	"/(app)/member/[username]/community": [],
+	"/(app)/member/[username]/community/modify": [],
+	"/(app)/member/[username]/community/write": [],
+	"/(app)/member/[username]/donation": [],
+	"/(app)/member/[username]/donation/list": [],
+	"/(app)/member/[username]/modify": [],
+	"/(app)/member/[username]/modify/password": [],
+	"/(app)/search": [
+		"src/routes/(app)/search/+page.server.ts"
+	]
+}

@@ -1,0 +1,18 @@
+[2K[1G[2m$ tsup[22m
+[34mCLI[39m Building entry: src/index.ts
+[34mCLI[39m Using tsconfig: tsconfig.json
+[34mCLI[39m tsup v6.5.0
+[34mCLI[39m Using tsup config: /Users/aaronpettengill/dev/remix-validated-form/packages/zod-form-data/tsup.config.ts
+[34mCLI[39m Target: es2019
+[34mCLI[39m Cleaning output folder
+[34mESM[39m Build start
+[34mCJS[39m Build start
+[32mESM[39m [1mdist/index.mjs     [22m[32m15.12 KB[39m
+[32mESM[39m [1mdist/index.mjs.map [22m[32m40.88 KB[39m
+[32mESM[39m ⚡️ Build success in 13ms
+[32mCJS[39m [1mdist/index.js     [22m[32m15.95 KB[39m
+[32mCJS[39m [1mdist/index.js.map [22m[32m41.06 KB[39m
+[32mCJS[39m ⚡️ Build success in 13ms
+[34mDTS[39m Build start
+[32mDTS[39m ⚡️ Build success in 1552ms
+[32mDTS[39m [1mdist/index.d.ts [22m[32m4.29 KB[39m

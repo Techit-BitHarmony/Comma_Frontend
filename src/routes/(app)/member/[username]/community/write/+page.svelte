@@ -1,6 +1,10 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 	import { onMount } from 'svelte';
+	import { goto } from '$app/navigation'
+	import { toastNotice } from '$components/toastr';
+	import { toastWarning } from '$components/toastr';
+
 
 	// 컴포넌트가 마운트된 후 실행되는 함수
 	onMount(() => {
@@ -20,7 +24,7 @@
 				?.split('=')[1];
 
 			if (!accessToken) {
-				throw new Error('AccessToken이 없습니다.');
+				toastWarning('AccessToken이 없습니다.');
 			}
 
 			try {
@@ -34,14 +38,15 @@
 				});
 
 				if (!response.ok) {
-					throw new Error('네트워크 오류: ' + response.statusText);
+					toastWarning('네트워크 오류: ' + response.statusText);
+					return; 
 				}
 
 				const resp = await response.json();
 
-				alert('글 작성 성공');
+				toastNotice('글 작성 성공');
 
-				window.location.href = '.';
+				await goto('.'); 
 			} catch (error) {
 				console.error('글 작성 오류:', error);
 			}

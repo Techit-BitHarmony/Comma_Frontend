@@ -2,7 +2,11 @@
 	import { onMount } from 'svelte';
 	import CreditLogs from './CreditLogs.svelte';
 	import Withdraws from './Withdraws.svelte';
+	import { getCookie } from '$components/token.js';
+	import { goto } from '$app/navigation';
+	import { baseUrl } from '$components/store.js';
 	import { toastNotice } from '$components/toastr';
+	import { toastWarning } from '$components/toastr';
 	import { loginUsername } from "$components/store.js";
 
 	let restCredit = '';
@@ -12,47 +16,48 @@
 	// 페이지 로드 시 서버에서 데이터를 가져옴
 	onMount(async () => {
 		try {
-			const accessToken = document.cookie
-				.split('; ')
-				.find((row) => row.startsWith('accessToken='))
-				?.split('=')[1];
+			const accessToken = getCookie("accessToken");
 
 			if (!accessToken) {
-				throw new Error('AccessToken이 없습니다.');
+				toastWarning('로그인 해주세요.');
 			}
 
-			const response = await fetch('http://localhost:8090/credit/creditlogs/mine', {
+			const creditLogsResponse = await fetch($baseUrl + `/credit/creditlogs/mine`, {
 				method: 'GET',
+				credentials: 'include',
 				headers: {
 					'Content-Type': 'application/json',
 					Authorization: `${accessToken}`
 				}
 			});
 
-			if (!response.ok) {
-				throw new Error('네트워크 오류: ' + response.statusText);
+			const creditLogsResp = await creditLogsResponse.json();
+
+			if (!creditLogsResponse.ok) {
+				toastWarning(creditLogsResp.message)
 			}
 
-			const resp = await response.json();
-			restCredit = resp.restCredit;
-			creditLogs = resp.creditLogDtos;
+			restCredit = creditLogsResp.restCredit;
+			creditLogs = creditLogsResp.creditLogDtos;
 
 			const withdrawsResponse = await fetch('http://localhost:8090/credit/withdraws/mine', {
 				method: 'GET',
+				credentials: 'include',
 				headers: {
 					'Content-Type': 'application/json',
 					Authorization: `${accessToken}`
 				}
 			});
 
+			const withdrawsResp = await withdrawsResponse.json();
+
 			if (!withdrawsResponse.ok) {
-				throw new Error('네트워크 오류: ' + withdrawsResponse.statusText);
+				toastWarning(withdrawsResp.message)
 			}
 
-			const withdrawResp = await withdrawsResponse.json();
-			withdraws = withdrawResp.withdraws;
+			withdraws = withdrawsResp.withdraws;
 		} catch (error) {
-			console.error('데이터를 가져오는 중 오류 발생:', error);
+			toastWarning('정보를 불러오는 데에 실패하였습니다.')
 		}
 	});
 </script>
@@ -66,7 +71,7 @@
 		<div>
 			<a href="/credit/charge" class="btn bg-base-200 btn-wide">충전하기</a>
 			<a href="/credit/withdraw/?restCredit={restCredit}" class="btn bg-base-200 btn-wide">출금하기</a>
-			{#if $loginUsername === 'admin'}
+			{#if $loginUsername === '프로필'}
 			<a href="/credit/withdraw/admin" class="btn bg-warning">관리자 페이지</a>
 			{/if}
 		</div>

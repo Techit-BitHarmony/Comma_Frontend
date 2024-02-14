@@ -2,75 +2,85 @@
 	import { onMount } from 'svelte';
 	import Withdraws from '../../Withdraws.svelte';
   import { loginUsername } from "$components/store.js";
-
+  import { page } from '$app/stores';
+	import { goto } from '$app/navigation';
+	import { baseUrl } from '$components/store.js';
+	import { toastNotice } from '$components/toastr';
+	import { toastWarning } from '$components/toastr';
+	import { getCookie } from '$components/token.js';
 
 	let withdraws: any[] = [];
 
 	onMount(async () => {
 
-    if ($loginUsername !== 'admin') {
-      alert('접근 권한이 없습니다.')
-      window.location.href = '../';
-      return;
+    if ($loginUsername !== '프로필') {
+      toastWarning('접근 권한이 없습니다.')
+      await goto('/credit')
     }
 
-		try {
-			const accessToken = document.cookie
-				.split('; ')
-				.find((row) => row.startsWith('accessToken='))
-				?.split('=')[1];
+    loadWithdraws(); 
+
+	});
+
+  async function loadWithdraws() {
+    try {
+			const accessToken = getCookie('accessToken'); 
 
 			if (!accessToken) {
-				throw new Error('AccessToken이 없습니다.');
+				toastWarning('로그인 해주세요.');
 			}
 
-			const withdrawsResponse = await fetch('http://localhost:8090/admin/credit/withdraws', {
+			const withdrawsResponse = await fetch($baseUrl + '/admin/credit/withdraws', {
 				method: 'GET',
+        credentials: 'include',
 				headers: {
 					'Content-Type': 'application/json',
 					Authorization: `${accessToken}`
 				}
 			});
 
-			if (!withdrawsResponse.ok) {
-				throw new Error('네트워크 오류: ' + withdrawsResponse.statusText);
-			}
+      const withdrawResp = await withdrawsResponse.json();
 
-			const withdrawResp = await withdrawsResponse.json();
+			if (!withdrawsResponse.ok) {
+        toastWarning(withdrawResp.message);
+      			}
+
 			withdraws = withdrawResp.withdraws;
 
 		} catch (error) {
-			console.error('데이터를 가져오는 중 오류 발생:', error);
+      toastWarning('출금 신청 내역을 불러오는 데 실패하였습니다.');
 		}
-	});
+  }
 
   async function approveWithdraw(withdrawId: number) {
     try {
-      const accessToken = document.cookie
-        .split('; ')
-        .find((row) => row.startsWith('accessToken='))
-        ?.split('=')[1];
+			const accessToken = getCookie('accessToken'); 
 
-      if (!accessToken) {
-        throw new Error('AccessToken이 없습니다.');
-      }
+			if (!accessToken) {
+				toastWarning('로그인 해주세요.');
+			}
 
-      const response = await fetch(`http://localhost:8090/admin/credit/withdraws/${withdrawId}/do`, {
+      const response = await fetch($baseUrl + `/admin/credit/withdraws/${withdrawId}/do`, {
         method: 'PUT',
+        credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
           Authorization: `${accessToken}`
         }
       });
 
+      const resp = await response.json(); 
+
       if (!response.ok) {
-        throw new Error('네트워크 오류: ' + response.statusText);
+        toastWarning(resp.message);
       }
 
-      window.location.reload();
+      toastNotice('출금 승인 성공')
+
+      await loadWithdraws(); 
 
     } catch (error) {
-      console.error('출금 승인 오류:', error);
+      toastWarning('출금 승인에 실패하였습니다.');
     }
   }
 
@@ -82,25 +92,30 @@
         ?.split('=')[1];
 
       if (!accessToken) {
-        throw new Error('AccessToken이 없습니다.');
+				toastWarning('로그인 해주세요.');
       }
 
-      const response = await fetch(`http://localhost:8090/admin/credit/withdraws/${withdrawId}/reject`, {
+      const response = await fetch($baseUrl + `/admin/credit/withdraws/${withdrawId}/reject`, {
         method: 'PUT',
+        credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
           Authorization: `${accessToken}`
         }
       });
 
+      const resp = await response.json(); 
+
       if (!response.ok) {
-        throw new Error('네트워크 오류: ' + response.statusText);
+        toastWarning(resp.message);
       }
 
-      window.location.reload();
+      toastNotice('출금 거절 성공')
+
+      await loadWithdraws(); 
       
     } catch (error) {
-      console.error('출금 거절 오류:', error);
+      toastWarning('출금 거절에 실패하였습니다.');
     }
   }
 </script>

@@ -3,6 +3,7 @@
   import {toastWarning} from "$components/toastr.js";
   import {goto} from "$app/navigation";
   import {setTokenCookie, checkAccessToken} from "$components/token.js";
+  import {loginUsername} from "$components/store.js";
 
   async function handleSubmit(event) {
     event.preventDefault();
@@ -40,10 +41,15 @@
       }
 
       const responseData = await response.json();
-      const { accessToken, refreshToken } = responseData.data;
+      const { username, accessToken, refreshToken } = responseData.data;
 
       setTokenCookie('accessToken', accessToken, 1);
       setTokenCookie('refreshToken', refreshToken, 24 * 7);
+
+      loginUsername.update(store => {
+        store = username;
+      return store;}
+  )
 
       checkAccessToken();
       // await goto("/");
@@ -70,7 +76,7 @@
         </div>
         <div class="flex flex-col m-5 items-center">
           <span class="text-center text-opacity-30"> ----- 처음 이용하시나요? ----- </span>
-          <a class="btn dark:btn-primary hover:btn-primary dark:hover:btn-ghost mt-3 w-6/12" href="/member/register">회원가입</a>
+          <a class="btn dark:btn-primary hover:btn-primary dark:hover:btn-ghost mt-3 w-6/12" href="/member/join">회원가입</a>
         </div>
       </form>
     </div>

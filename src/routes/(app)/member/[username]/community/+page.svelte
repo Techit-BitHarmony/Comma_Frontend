@@ -2,6 +2,7 @@
 	import { onMount } from 'svelte';
 	import { writable } from 'svelte/store';
 	import { page } from '$app/stores';
+	import { goto } from '$app/navigation'
 	import CommentList from './CommentList.svelte';
 	import DeleteButton from './DeleteButton.svelte';
 

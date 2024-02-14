@@ -1,6 +1,8 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import {page} from "$app/stores";
+	import { goto } from '$app/navigation';
+	import { baseUrl } from '$components/store.js';
 	import { toastNotice } from '$components/toastr';
 	import { toastWarning } from '$components/toastr';
 
@@ -15,22 +17,18 @@
 			const bankAccountNo = form.elements['bankAccountNo'].value;
 			const withdrawAmount = form.elements['withdrawAmount'].value;
 
-			if(parseInt(withdrawAmount) > parseInt(restCredit)){
-				toastWarning(`보유한 크레딧(${restCredit})을 초과하여 신청할 수 없습니다.`)
-				return; 
-			}
-
 			const accessToken = document.cookie
 				.split('; ')
 				.find((row) => row.startsWith('accessToken='))
 				?.split('=')[1];
 
 			if (!accessToken) {
-				throw new Error('AccessToken이 없습니다.');
+				toastWarning('로그인 해주세요.');
 			}
 
 			try {
-				const response = await fetch('http://localhost:8090/credit/withdraws', {
+				const response = await fetch($baseUrl + '/credit/withdraws', {
+					credentials: 'include',
 					method: 'POST',
 					headers: {
 						'Content-Type': 'application/json',
@@ -39,18 +37,18 @@
 					body: JSON.stringify({ bankName, bankAccountNo, withdrawAmount })
 				});
 
+				const resp = await response.json();
+
 				if (!response.ok) {
-					toastWarning('출금 신청 실패');
+					toastWarning(resp.message);
 					return; 
 				}
 
-				const resp = await response.json();
+				toastNotice('출금 신청 성공');
 
-				alert('출금 신청 성공');
-
-				window.location.href = '/credit';
+				await goto('/credit');
 			} catch (error) {
-				console.error('충전 오류:', error);
+				toastWarning('출금 신청하는 데 실패하였습니다.')
 			}
 		});
 	});

@@ -1,28 +1,25 @@
 <script lang="ts">
-
-	$: ({ name, images, artists, id } = $$restProps);
+	$: ({ albumname, imgPath, artistNickname, artistUsername, id } = $$restProps);
 </script>
 
 <div class="bg-primary-dark dark:bg-primary-light p-3 rounded">
 	<a href="/album/{id}" class="group space-y-2 relative" aria-label="Album detail page">
 		<div class="w-auto rounded overflow-hidden relative">
-			{#if name} <span class="sr-only">{name}</span>{/if}
+			{#if albumname} <span class="sr-only">{albumname}</span>{/if}
 			<div
-				class="group-hover:bg-primary-light mix-blend-multiply transition-all absolute inset-0"
+				class="group-hover:bg-gray mix-blend-multiply transition-all absolute inset-0"
 			/>
-			<img alt="Albums" srcset={generateSrcset(images)} />
+			<img alt="Albums" src="{imgPath}" />
 		</div>
-		{#if name}
-			<div class="relative truncate w-32 xs:w-48 sm:w-32 font-bold text-sm text-inverse">
-				{name}
+		{#if albumname}
+			<div class="relative truncate w-32 xs:w-48 sm:w-32 font-bold text-sm text-inverse text-gray-light dark:text-gray-light">
+				{albumname}
 			</div>
 		{/if}
 	</a>
-	{#each artists as artist}
-		<div class="text-md sm:text-xs">
-			<a class="text-inverse" href="/artist/{artist.id}" aria-label="Artist detail page"
-				>{artist.name}</a
-			>
-		</div>
-	{/each}
+	<div class="text-md sm:text-xs">
+		<a class="text-inverse text-gray-light dark:text-gray-light dark:hover:text-primary" href="/member/{artistUsername}" aria-label="Artist detail page">
+			{artistNickname}
+		</a>
+	</div>
 </div>
