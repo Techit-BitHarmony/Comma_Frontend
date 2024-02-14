@@ -3,8 +3,9 @@
 	import NativePlayer from '$components/player/NativePlayer.svelte';
 	import Header from "$components/elements/Header.svelte";
 	import Footer from "$components/elements/Footer.svelte";
-	import {baseUrl, isLogin} from "$components/store";
+	import {baseUrl, isLogin, loginUsername, loginMemberId} from "$components/store";
 	import {getCookie} from "$components/token";
+	import {onMount} from "svelte";
 
 	let followData = {};
 
@@ -19,6 +20,11 @@
     followData = responseData.data;
 	}
 
+	onMount(() => {
+		loginUsername.set(localStorage.getItem('username'));
+		loginMemberId.set(localStorage.getItem('memberId'));
+	})
+
 </script>
 
 <div class="flex flex-col h-screen">
@@ -26,7 +32,7 @@
 	<div class="flex-grow mt-20 bg-gray dark:bg-primary-dark">
 		<slot />
 	</div>
-	<div class="fixed z-20 bottom-1 left-1">
+	<div class="fixed z-50 bottom-1 left-1">
 		<label class="btn btn-ghost dark:text-primary" on:click={getFollowList} for="follow-drawer"><i class="fa-solid fa-bars fa-lg"></i></label>
 	</div>
 	<Footer />
@@ -35,7 +41,7 @@
 	<NativePlayer />
 </div>
 
-<div class="drawer drawer-start">
+<div class="drawer drawer-start z-40">
 	<input id="follow-drawer" type="checkbox" class="drawer-toggle" />
 	<div class="drawer-side">
 		<label for="follow-drawer" aria-label="close sidebar" class="drawer-overlay"></label>
