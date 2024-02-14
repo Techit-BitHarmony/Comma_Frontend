@@ -36,6 +36,7 @@ onMount(() => {
           <div tabindex="0" role="button" class="btn btn-ghost rounded-btn">{$loginUsername}</div>
           <ul tabindex="0" class="menu dropdown-content z-[1] p-2 shadow rounded-box w-52 mt-4 bg-gray-light dark:bg-gray-dark">
             <li><a href="/member/{$loginUsername}"><i class="fa-solid fa-address-card"></i>프로필</a></li>
+            <li><a href="/member/{$loginUsername}/modify"><i class="fa-solid fa-pen-to-square"></i>회원정보 수정</a></li>
             <li><a on:click={logout}><i class="fa-solid fa-door-closed"></i>로그아웃</a></li>
           </ul>
         </div>
