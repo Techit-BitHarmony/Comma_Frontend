@@ -12,6 +12,7 @@
 	let albumId = $state({});
 	let track = {};
 	let ismyAlbum = $state(false);
+	let canLike = $state(true);
 
 	let previousPage = base;
 
@@ -20,19 +21,12 @@
 	});
 
 	async function getAlbumDetail() {
+
 		const response = await fetch(`${$baseUrl}/album/detail/${albumId}`, {
 			method: 'GET'
 		});
 
-		const memberResponse = await fetch(`${$baseUrl}/member/mypage`, {
-			method: 'GET',
-			headers: {
-				'Authorization': getCookie('accessToken'),
-			},
-		});
-
 		const responseData = await response.json();
-		const memberResponseData = await memberResponse.json();
 		album = responseData.data;
 
 
@@ -42,13 +36,43 @@
 			return;
 		}
 
-		if(responseData.data.artistUsername === memberResponseData.data.username) {
-			ismyAlbum = true;
-		}
-
 		document.getElementById('albumCover').src = responseData.data.imgPath;
 
+		if(getCookie('accessToken')) {
+			const memberResponse = await fetch(`${$baseUrl}/member/mypage`, {
+				method: 'GET',
+				headers: {
+					'Authorization': getCookie('accessToken'),
+				},
+			});
+
+			const likeResponse = await fetch(`${$baseUrl}/album/${albumId}/like`, {
+				method: 'GET',
+				headers: {
+					'Authorization': getCookie('accessToken'),
+				},
+			});
+
+			if(memberResponse.ok) {
+				const memberResponseData = await memberResponse.json();
+				if (responseData.data.artistUsername === memberResponseData.data.username) {
+					ismyAlbum = true;
+				}
+			}
+
+			if(likeResponse.ok) {
+				const likeResponseData = await likeResponse.json();
+				if (likeResponseData.data === true) {
+					canLike = true;
+				}
+				else {
+					canLike = false;
+				}
+			}
+		}
+
 		makeAudioTrack();
+		toggleHeart();
 	}
 
 	function makeCdnUrl(filePath) {
@@ -94,6 +118,44 @@
 		getAlbumDetail();
 	})
 
+	function toggleHeart() {
+		var heartIcon = document.getElementById('heart-toggle').querySelector('svg');
+		if (canLike === true) {
+			heartIcon.classList.remove('text-red-500');
+			heartIcon.classList.add('text-gray-500');
+		} else {
+			heartIcon.classList.remove('text-gray-500');
+			heartIcon.classList.add('text-red-500');
+		}
+	}
+
+	async function likeAlbum() {
+		if (canLike === true) {
+			const response = await fetch(`${$baseUrl}/album/${albumId}/like`, {
+				method: 'POST',
+				headers: {
+					'Authorization': getCookie('accessToken'),
+				},
+			});
+			if (response.ok) {
+				canLike = false;
+				toastNotice("좋아요를 눌렀습니다.");
+			}
+		} else {
+			const response = await fetch(`${$baseUrl}/album/${albumId}/cancelLike`, {
+				method: 'POST',
+				headers: {
+					'Authorization': getCookie('accessToken'),
+				},
+			});
+			if (response.ok) {
+				canLike = true;
+				toastNotice("좋아요를 취소했습니다.");
+			}
+		}
+
+		toggleHeart();
+	}
 </script>
 
 <div class="container my-4 space-y-4">
@@ -118,11 +180,16 @@
 			<div class="divider"></div>
 			<div class="flex flex-row justify-center items-center">
 				<div class="flex flex-col m-5 w-1/2 relative">
-          <span class="block w-64 h-64 relative">
-            <img id="albumCover" class="w-full h-full object-cover"
-				 src="https://kv6d2rdb2209.edge.naverncp.com/GSctnLFiOr/defaultimage.jpg?type=f&w=300&h=300&ttype=jpg"
-				 alt="Album Cover"/>
-          </span>
+				  <span class="block w-300 h-300 relative">
+					<img id="albumCover" class="w-full h-full object-cover mb-3"
+						 src="https://kv6d2rdb2209.edge.naverncp.com/GSctnLFiOr/defaultimage.jpg?type=f&w=300&h=300&ttype=jpg"
+						 alt="Album Cover"/>
+				  </span>
+					<button id="heart-toggle" on:click={likeAlbum}>
+						<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" stroke="none">
+							<path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+						</svg>
+					</button>
 				</div>
 				<div class="flex flex-col m-5 w-1/2">
 					<p>곡 장르</p>
