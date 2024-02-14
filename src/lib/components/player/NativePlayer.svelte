@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { fly } from 'svelte/transition';
-	import { audioTrack } from '$components/player/store';
+	import { audioTrack } from '$components/store';
 
 	let audio: any;
 	let paused: boolean = false;
