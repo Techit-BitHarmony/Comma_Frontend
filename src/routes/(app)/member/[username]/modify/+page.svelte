@@ -106,15 +106,15 @@
         <div class="justify-center">
             <form on:submit="{handleSubmit}" method="post">
                 <div class="flex flex-row m-5">
-                  <label for="username" class="form-label input input-bordered w-1/4 h-12 flex items-center justify-center mt-3 mr-1">아이디</label>
+                  <label for="username" class="form-label input input-bordered w-1/4 h-12 flex items-center justify-center mt-3 mr-1 text-gray-light">아이디</label>
                   <input class="input input-bordered dark:input-primary bg-gray-light dark:bg-gray-dark mt-3 w-full h-12 flex items-center justify-center" name="username" id="username" type="text" readonly value="{user.username}"/>
                 </div>
                 <div class="flex flex-row m-5">
-                    <label for="nickname" class="form-label input input-bordered w-1/4 h-12 flex items-center justify-center mt-3 mr-1">닉네임</label>
+                    <label for="nickname" class="form-label input input-bordered w-1/4 h-12 flex items-center justify-center mt-3 mr-1 text-gray-light">닉네임</label>
                     <input class="input input-bordered dark:input-primary bg-gray-light dark:bg-gray-dark mt-3 w-full h-12 flex items-center justify-center" name="nickname" id="nickname" type="text" value="{user.nickname}"/>
                   </div>
                   <div class="flex flex-row m-5">
-                    <label for="email" class="form-label input input-bordered w-1/4 h-12 flex items-center justify-center mt-3 mr-1">이메일</label>
+                    <label for="email" class="form-label input input-bordered w-1/4 h-12 flex items-center justify-center mt-3 mr-1 text-gray-light">이메일</label>
                     <input class="input input-bordered dark:input-primary bg-gray-light dark:bg-gray-dark mt-3 w-full h-12 flex items-center justify-center" name="email" id="email" type="text" value="{user.Email}"/>
                   </div>
                 <div class="flex justify-center"> 
