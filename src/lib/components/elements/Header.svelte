@@ -46,7 +46,7 @@ onMount(() => {
         </div>
         <span class="mr-3"></span>
       {:else}
-        <a class="btn btn-ghost" href="/member/login">로그인</a>
+        <a class="btn btn-ghost" href="/member/login"><i class="fa-solid fa-door-open"></i>로그인</a>
       {/if}
     </div>
   </div>
