@@ -6,4 +6,3 @@ export const loginUsername = writable('프로필');
 export const loginMemberId = writable('0');
 export const isLogin = writable(false);
 export const baseUrl = writable("https://yonguk.shop");
-//export const baseUrl = writable("https://yonguk.shop");
