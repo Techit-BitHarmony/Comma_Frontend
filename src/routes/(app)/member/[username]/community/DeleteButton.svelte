@@ -25,7 +25,7 @@
             }
 
             alert('글 삭제 성공')
-			location.reload();
+			      location.reload();
             
         } catch (error) {
             console.error('글 삭제 오류:', error);
@@ -33,4 +33,4 @@
     }
 </script>
 
-<button on:click={deleteArticle}>삭제하기</button>
+<button class="text-primary-dark dark:text-primary font-extrabold" on:click={deleteArticle}><i class="fa-solid fa-trash"></i>삭제하기</button>

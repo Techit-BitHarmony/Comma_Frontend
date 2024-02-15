@@ -1,6 +1,6 @@
 <script>
   import {baseUrl} from "$components/store.js";
-  import {toastWarning} from "$components/toastr.js";
+  import {toastNotice, toastWarning} from "$components/toastr.js";
   import {goto} from "$app/navigation";
   import {setTokenCookie, checkAccessToken} from "$components/token.js";
   import {loginUsername} from "$components/store.js";
@@ -26,34 +26,38 @@
 
       if (!response.ok) {
         const errorData = await response.json();
-        if (errorData.username) { // @Valid 로 처리 된 내용
-          toastWarning(errorData.message);
-          return;
-        }
-
-        if (errorData.password) { // @Valid 로 처리 된 내용
-          toastWarning(errorData.message);
-          return;
-        }
-
-        toastWarning(errorData.message); // Exception 으로 처리 된 message
-        return;
+        if(errorData.validMessages !== null){
+            if (errorData.validMessages.username) { // @Valid 로 처리 된 내용
+            toastWarning(errorData.validMessages.username);
+            return;
+          }
+  
+          if (errorData.validMessages.password) { // @Valid 로 처리 된 내용
+            toastWarning(errorData.validMessages.password);
+            return;
+          }
       }
+      toastWarning(errorData.message); // Exception 으로 처리 된 message
+        return;
+    }
 
       const responseData = await response.json();
-      const { username, accessToken, refreshToken } = responseData.data;
+      const { username, memberId, accessToken, refreshToken } = responseData.data;
 
       setTokenCookie('accessToken', accessToken, 1);
       setTokenCookie('refreshToken', refreshToken, 24 * 7);
 
       loginUsername.update(store => {
         store = username;
-      return store;}
-  )
+        return store;
+      })
+
+      localStorage.setItem('username', username);
+      localStorage.setItem('memberId', memberId);
 
       checkAccessToken();
-      // await goto("/");
-      alert('로그인 성공')
+      toastNotice("로그인 되었습니다.");
+      await goto("/");
     }
   }
 </script>

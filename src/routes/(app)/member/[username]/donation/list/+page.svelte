@@ -105,7 +105,7 @@
     async function donation_regular_update_request(donation){
         donation_update.artistName = donation.artistUsername;
         donation_update.executeDay = date.getDate();
-        console.log(date);
+
         const access_token = getCookie("accessToken");
         let response = await fetch($baseUrl + `/donation/regular`, {
             headers: {
@@ -163,7 +163,7 @@
                 <div class="text-left p-4">후원 목록이 없습니다.</div>
             {:else }
                 {#each donation_response as donation}
-                    <div class="card card-side bg-base-100 shadow-xl m-5">
+                    <div class="card card-side dark:input-primary bg-gray-light dark:bg-gray-dark shadow-xl m-5">
                         <div class="avatar placeholder w-1/5 h-12 place-self-center justify-center pb-0.5 pt-0.5">
                             <div class="bg-neutral text-neutral-content rounded-full w-11">
                                 <span>{donation.patronUsername}</span>
@@ -189,7 +189,7 @@
                 <div class="text-left p-4">후원 받은 목록이 없습니다.</div>
             {:else }
                 {#each donation_response_art as donation}
-                    <div class="card card-side bg-base-100 shadow-xl m-5">
+                    <div class="card card-side dark:input-primary bg-gray-light dark:bg-gray-dark shadow-xl m-5">
                         <div class="avatar placeholder w-1/5 h-12 place-self-center justify-center pb-0.5 pt-0.5">
                             <div class="bg-neutral text-neutral-content rounded-full w-11">
                                 <span>{donation.patronUsername}</span>
@@ -215,7 +215,7 @@
                 <div class="text-left p-4">후원 목록이 없습니다.</div>
             {:else }
                 {#each donation_regular_response as donation, index}
-                    <div class="card card-side bg-base-100 shadow-xl m-5">
+                    <div class="card card-side dark:input-primary bg-gray-light dark:bg-gray-dark shadow-xl m-5">
                         <div class="card-body place-self-center">
                             <ul class="steps">
                                 <li data-content="" class="step step-neutral">Me</li>
@@ -235,7 +235,7 @@
                         </div>
                     </div>
                     {#if donation_update_check[index]}
-                        <div class="card card-side bg-base-100 shadow-xl m-5">
+                        <div class="card card-side dark:input-primary bg-gray-light dark:bg-gray-dark shadow-xl m-5">
                             <div class="grid grid-cols-2">
                                 <div class="card-body">
                                     <DateInput format="yy/MM/dd" placeholder="년/월/일 (6자리)" dynamicPositioning

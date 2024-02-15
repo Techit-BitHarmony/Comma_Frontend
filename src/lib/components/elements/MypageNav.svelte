@@ -25,8 +25,8 @@
 </div>
 
 <style>
-    
+
     .highlight:visited {
     color: white;
   }
-  </style>
+</style>

@@ -27,9 +27,11 @@
 	{/if}
 	<h1>New album releases</h1>
 	<div class="wrapper-cover">
-		{#each newAlbums.content as item}
-			<Cover {...item} />
-		{/each}
+		{#if newAlbums.content}
+			{#each newAlbums.content as item}
+				<Cover {...item} />
+			{/each}
+		{/if}
 	</div>
 </div>
 
