@@ -26,19 +26,20 @@
 
       if (!response.ok) {
         const errorData = await response.json();
-        if (errorData.username) { // @Valid 로 처리 된 내용
-          toastWarning(errorData.message);
-          return;
-        }
-
-        if (errorData.password) { // @Valid 로 처리 된 내용
-          toastWarning(errorData.message);
-          return;
-        }
-
-        toastWarning(errorData.message); // Exception 으로 처리 된 message
-        return;
+        if(errorData.validMessages !== null){
+            if (errorData.validMessages.username) { // @Valid 로 처리 된 내용
+            toastWarning(errorData.validMessages.username);
+            return;
+          }
+  
+          if (errorData.validMessages.password) { // @Valid 로 처리 된 내용
+            toastWarning(errorData.validMessages.password);
+            return;
+          }
       }
+      toastWarning(errorData.message); // Exception 으로 처리 된 message
+        return;
+    }
 
       const responseData = await response.json();
       const { username, memberId, accessToken, refreshToken } = responseData.data;
