@@ -6,18 +6,23 @@
 	import { toastNotice } from '$components/toastr';
 	import { toastWarning } from '$components/toastr';
 	import { loginUsername } from '$components/store.js';
+	import { writable } from 'svelte/store';
 
 	let restCredit = '';
-	let creditLogs: any[] = [];
+
+	let creditLogs = writable([]);
+	let currentPage = writable(1);
+	let totalPages = writable(1);
+	let itemsPerPage = 10;
+	let totalElements = '';
 
 	onMount(async () => {
 		try {
-			loadCreditLogs(); 
+			loadCreditLogs();
 		} catch (error) {
 			toastWarning('정보를 불러오는 데에 실패하였습니다.');
 		}
 	});
-
 
 	async function loadCreditLogs() {
 		const accessToken = getCookie('accessToken');
@@ -27,7 +32,7 @@
 			return;
 		}
 
-		const creditLogsResponse = await fetch($baseUrl + `/credit/creditlogs/mine`, {
+		const creditLogsResponse = await fetch($baseUrl + `/credit/creditlogs/mine?page=${$currentPage}`, {
 			method: 'GET',
 			credentials: 'include',
 			headers: {
@@ -43,7 +48,28 @@
 		}
 
 		restCredit = creditLogsResp.restCredit;
-		creditLogs = creditLogsResp.creditLogDtos;
+
+		creditLogs.set(creditLogsResp.creditLogDtos.content);
+
+		const totalLogs = creditLogsResp.creditLogDtos.totalElements;
+		totalElements = totalLogs;
+		totalPages.set(Math.ceil(totalLogs / itemsPerPage));
+	}
+
+	function previousPage() {
+		currentPage.update((n) => Math.max(n - 1, 1));
+		loadCreditLogs();
+		
+	}
+
+	function nextPage() {
+		currentPage.update((n) => n + 1);
+		loadCreditLogs();
+	}
+
+	function movePage(pageNumber) {
+		currentPage.set(pageNumber);
+		loadCreditLogs();
 	}
 </script>
 
@@ -87,7 +113,7 @@
 			</tr>
 		</thead>
 		<tbody class="text-center text-primary-dark dark:text-primary">
-			{#each creditLogs as log}
+			{#each $creditLogs as log}
 				<tr>
 					<td>{new Date(log.createDate).toLocaleDateString('ko-KR')}</td>
 					<td>{log.eventType}</td>
@@ -97,7 +123,27 @@
 			{/each}
 		</tbody>
 	</table>
-	{#if creditLogs.length === 0}
+	{#if $creditLogs.length === 0}
 		<p class="flex justify-center">크레딧 내역이 없습니다</p>
 	{/if}
+
+	<div class="join flex justify-center">
+		{#if $totalPages > 0}
+			<button class="join-item btn btn-square" on:click={previousPage}>이전</button>
+		{/if}
+		{#each Array.from({ length: $totalPages }, (_, index) => index + 1) as pageNumber}
+			{#if pageNumber === $currentPage}
+				<button class="join-item btn btn-square btn-active" on:click={() => movePage(pageNumber)}
+					>{pageNumber}</button
+				>
+			{:else}
+				<button class="join-item btn btn-square" on:click={() => movePage(pageNumber)}
+					>{pageNumber}</button
+				>
+			{/if}
+		{/each}
+		{#if $totalPages > $currentPage}
+			<button class="join-item btn btn-square" on:click={nextPage}>다음</button>
+		{/if}
+	</div>
 </div>
