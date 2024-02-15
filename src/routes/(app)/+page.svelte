@@ -1,19 +1,37 @@
-<script lang="ts">
-	import type { PageData } from './$types';
+<script>
 	import Cover from '$components/elements/Cover.svelte';
 	import Coverage from '$components/elements/Coverage.svelte';
+  import { baseUrl } from "$components/store.js";
+	import {onMount} from "svelte";
 
-	export let data: PageData;
+	let newAlbums = $state({});
 
-	$: ({ newAlbums } = data);
+	async function getAlbums() {
+		const response = await fetch($baseUrl + "/album/list", {
+			method: 'GET',
+		});
+
+		const responseData = await response.json();
+		newAlbums = responseData.data;
+	}
+
+	onMount(() => {
+		getAlbums();
+	})
+
 </script>
 
 <div class="container my-4 space-y-4">
-	<Coverage album={newAlbums.albums.items[0]} />
+	{#if newAlbums.content}
+		<Coverage album={newAlbums.content[0]} />
+	{/if}
 	<h1>New album releases</h1>
 	<div class="wrapper-cover">
-		{#each newAlbums.albums.items as item}
-			<Cover {...item} />
-		{/each}
+		{#if newAlbums.content}
+			{#each newAlbums.content as item}
+				<Cover {...item} />
+			{/each}
+		{/if}
 	</div>
 </div>
+

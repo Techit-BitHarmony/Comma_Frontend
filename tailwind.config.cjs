@@ -18,37 +18,37 @@ const config = {
 		fontFamily: {
 			sans: ['Raleway', ...fontFamily.sans]
 		},
-		colors: {
-			transparent: 'transparent',
-			current: 'currentColor',
-			white: '#FFF',
-			black: '#000',
-			gray: {
-				// Baby powder
-				light: '#F7F7F2',
-				// Alabaster
-				DEFAULT: '#DBE1D4',
-				// Night
-				dark: '#121113'
-			},
-			primary: {
-				// Beige
-				light: '#E4E6C3',
-				// Moss green
-				DEFAULT: '#899878',
-				// Eerie black
-				dark: '#222725'
-			}
-		},
 		extend: {
 			screens: {
 				xs: '465px'
 				// => @media (min-width: 465px) { ... }
-			}
+			},
+			colors: {
+				transparent: 'transparent',
+				current: 'currentColor',
+				white: '#FFF',
+				black: '#000',
+				gray: {
+					// Light gray
+					light: '#F5F5F5',
+					// Dark gray
+					DEFAULT: '#e8e8e8',
+					// Night
+					dark: '#121113'
+				},
+				primary: {
+					// Light slate gray
+					light: 'rgba(100,149,237,0.7)',
+					// Cornflower blue
+					DEFAULT: '#6495ED',
+					// Eerie black
+					dark: '#151816'
+				}
+			},
 		}
 	},
 
-	plugins: [require('@tailwindcss/forms'), require('@tailwindcss/typography')]
+	plugins: [require('@tailwindcss/forms'), require('@tailwindcss/typography'), require('daisyui')]
 };
 
 module.exports = config;
