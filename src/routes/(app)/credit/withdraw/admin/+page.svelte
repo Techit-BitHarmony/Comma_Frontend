@@ -149,6 +149,7 @@
 			<thead class="bg-gray-200 text-center text-base font-bold">
 				<tr>
 					<th>날짜</th>
+					<th>신청인</th>
 					<th>은행명</th>
 					<th>계좌번호</th>
 					<th>출금신청액</th>
@@ -160,6 +161,7 @@
 				{#each $withdraws as withdraw}
 					<tr>
 						<td>{new Date(withdraw.applyDate).toLocaleDateString('ko-KR')}</td>
+						<td>{withdraw.applicant.username}</td>
 						<td>{withdraw.bankName}</td>
 						<td>{withdraw.bankAccountNo}</td>
 						<td>{withdraw.withdrawAmount}</td>
