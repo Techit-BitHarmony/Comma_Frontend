@@ -12,6 +12,7 @@
     let licenseDescription = $state("해당 곡의 라이센스"); // 라이센스 설명을 저장하는 변수
     let permitChecked = $state(false); // 라이센스 체크박스의 상태를 저장하는 변수
     let price = $state(0); // 가격을 저장하는 변수
+    let source = $state({});
     let encodeState = $state(false);
     let musicImageFile;
 
@@ -75,6 +76,7 @@
         const data = JSON.parse(event.data);
         if (data[1] === "COMPLETE") {
             if (statElement) statElement.innerHTML = '인코딩 완료!';
+            encodeState = true;
         }
     }
 
@@ -169,6 +171,10 @@
 
         musicImageFile = file;
     }
+
+    onDestroy(() => {
+        source.onmessage = null;
+    });
 </script>
 
 
@@ -236,7 +242,11 @@
                     {/if}
 
                     <div class="flex flex-col m-5">
-                        <button type="submit" class="btn dark:btn-primary hover:btn-primary dark:hover:btn-ghost mt-3 w-full">앨범 등록하기</button>
+                        {#if encodeState}
+                            <button type="submit" class="btn dark:btn-primary hover:btn-primary dark:hover:btn-ghost mt-3 w-full">앨범 등록하기</button>
+                        {:else}
+                            <a class="btn mt-3 w-full">업로드 및 인코딩을 완료해주세요!</a>
+                        {/if}
                     </div>
                 </div>
             </form>
