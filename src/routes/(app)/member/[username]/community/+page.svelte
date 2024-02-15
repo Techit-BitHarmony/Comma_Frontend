@@ -79,7 +79,6 @@
 	}
 
 	function scrollToArticle(articleId: any) {
-		console.log('Scrolling to article:', articleId);
 		window.location.hash = `#article-${articleId}`;
 	}
 
@@ -173,14 +172,14 @@
 		</div>
 	{/if}
 	{#each $articles as article, index}
-		<div class="card w-auto bg-base-100 dark:bg-gray-800 shadow-xl">
+		<div class="card w-auto bg-gray-light dark:bg-gray-800 shadow-xl">
 			<div class="card-body">
 				<div class="flex justify-between">
 					<div class="flex-col items-center">
 						<h2 class="card-title mb-2">{article.title}</h2>
 						<div>
 							<span class="text-primary-dark dark:text-primary">작성자 : {article.username}</span>
-							<span class="badge dark:badge-primary ml-2"
+							<span class="badge dark:badge-primary badge-outline dark:badge-outline ml-2"
 								>{new Date(article.createDate).toLocaleDateString('ko-KR', {
 									year: 'numeric',
 									month: '2-digit',
@@ -201,7 +200,7 @@
 								. . .
 							</div>
 							<ul
-								class="dropdown-content z-[1] menu p-2 shadow bg-base-100 dark:bg-gray-600 rounded-box w-52"
+								class="dropdown-content z-[1] menu p-2 shadow bg-gray-light dark:bg-gray-600 rounded-box w-52"
 							>
 								<li>
 									<a
@@ -218,15 +217,15 @@
 				<p class="text-primary-dark dark:text-primary">{article.content}</p>
 				<div class="divider dark:divider-accent mt-20">댓글</div>
 
-				<details class="collapse bg-base-200">
-					<summary class="collapse-title bg-base-200 dark:bg-gray-600 text-sm font-medium"
+				<details class="collapse bg-gray">
+					<summary class="collapse-title bg-gray dark:bg-gray-600 text-sm font-medium"
 						><i class="fa-regular fa-note-sticky me-3"></i>댓글 작성하기</summary
 					>
-					<div class="collapse-content bg-base-200 dark:bg-gray-600">
+					<div class="collapse-content bg-gray dark:bg-gray-600">
 						<form id="commentForm" on:submit={submitComment}>
 							<div>
 								<input
-									class="input input-bordered input-md bg-base-100 dark:bg-gray-800 w-full max-w-xs"
+									class="input input-bordered input-md bg-gray-light dark:bg-gray-800 w-full max-w-xs"
 									type="text"
 									name="content"
 									placeholder="댓글을 작성하세요."

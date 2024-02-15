@@ -4,7 +4,6 @@
 	import { writable } from 'svelte/store';
 	import { getCookie } from '$components/token.js';
 	import { baseUrl } from '$components/store.js';
-	import { toastNotice } from '$components/toastr';
 	import { toastWarning } from '$components/toastr';
 
 	let withdraws = writable<any[]>([]);
@@ -70,8 +69,8 @@
 	}
 </script>
 
-<div class="card bg-base-100 dark:bg-gray-800 p-4">
-	<p class="text-3xl text-primary-dark dark:text-primary font-extrabold mb-3">
+<div class="card bg-gray-light dark:bg-gray-800 p-4">
+	<p class="text-3xl text-primary-dark dark:text-primary font-extrabold mb-3 p-3">
 		<i class="fa-solid fa-wallet me-3" />출금 신청 내역
 	</p>
 	<table class="table">

@@ -89,12 +89,17 @@
 </script>
 
 <div>
-	<div class="container bg-base-100 my-4 w-full">
+	<div class="container bg-gray-light dark:bg-gray-dark my-4 w-full mt-20">
+		<div class="m-5">
+			<h1>
+				글 수정하기
+			</h1>
+		</div>
 		<div class="card card-body">
 			<form on:submit={updateArticle}>
 				<div class="mt-5">
 					<label for="category">카테고리</label>
-					<select class="select select-bordered w-full max-w-xs ms-2" name="category" required>
+					<select class="select select-bordered w-full max-w-xs ms-2 text-gray-light" name="category" required>
 						<option value="" disabled selected>카테고리를 선택하세요</option>
 						<option value="공지사항">공지사항</option>
 						<option value="홍보">홍보</option>
@@ -107,7 +112,7 @@
 						type="text"
 						name="title"
 						id="title"
-						class="input input-bordered w-10/12 max-w-xs ms-10"
+						class="input input-bordered w-10/12 max-w-xs ms-10 text-gray-light"
 						placeholder="제목을 입력하세요"
 						bind:value={article.title}
 						required
@@ -116,7 +121,7 @@
 				<div class="flex items-center mt-5">
 					<label for="content">내용</label>
 					<textarea
-						class="textarea textarea-bordered w-8/12 ms-11"
+						class="textarea textarea-bordered w-8/12 ms-11 text-gray-light"
 						name="content"
 						id="content"
 						placeholder="내용을 입력하세요"

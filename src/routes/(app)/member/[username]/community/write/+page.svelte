@@ -55,12 +55,17 @@
 	});
 </script>
 
-<div class="container bg-base-100 dark:bg-gray-800 my-4 w-full">
+<div class="container bg-gray-light dark:bg-gray-800 my-4 w-full mt-20">
+	<div class="m-5">
+		<h1>
+			글 작성하기
+		</h1>
+	</div>
 	<div class="card card-body">
 		<form id="articleForm">
 			<div class="mt-5">
 				<label class="text-primary-dark dark:text-primary" for="category"><i class="fa-solid fa-list me-3"></i>카테고리</label>
-				<select class="select select-bordered w-full max-w-xs text-primary-dark dark:text-primary bg-base-200 dark:bg-gray-600 ms-2" name="category" required>
+				<select class="select select-bordered w-full max-w-xs text-gray-light dark:text-primary bg-base-200 dark:bg-gray-600 ms-2" name="category" required>
 					<option value="" disabled selected>카테고리를 선택하세요</option>
 					<option value="공지사항">공지사항</option>
 					<option value="홍보">홍보</option>
@@ -73,7 +78,7 @@
 					type="text"
 					name="title"
 					id="title"
-					class="input input-bordered w-10/12 max-w-xs text-primary-dark dark:text-primary bg-base-200 dark:bg-gray-600 ms-10"
+					class="input input-bordered w-10/12 max-w-xs text-gray-light dark:text-primary bg-base-200 dark:bg-gray-600 ms-10"
 					placeholder="제목을 입력하세요"
 					required
 				/>
@@ -81,7 +86,7 @@
 			<div class="flex items-center mt-5">
 				<label class="text-primary-dark dark:text-primary" for="content"><i class="fa-solid fa-message me-3"></i>내용</label>
 				<textarea
-					class="textarea textarea-bordered w-8/12 text-primary-dark dark:text-primary bg-base-200 dark:bg-gray-600 ms-11"
+					class="textarea textarea-bordered w-8/12 text-gray-light dark:text-primary bg-base-200 dark:bg-gray-600 ms-11"
 					name="content"
 					id="content"
 					placeholder="내용을 입력하세요"

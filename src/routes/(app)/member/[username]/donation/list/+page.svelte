@@ -105,7 +105,7 @@
     async function donation_regular_update_request(donation){
         donation_update.artistName = donation.artistUsername;
         donation_update.executeDay = date.getDate();
-        console.log(date);
+
         const access_token = getCookie("accessToken");
         let response = await fetch($baseUrl + `/donation/regular`, {
             headers: {
