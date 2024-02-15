@@ -3,11 +3,11 @@
     import {page} from '$app/stores';
     import {getCookie} from '$components/token.js';
     import {goto} from "$app/navigation";
-    import {baseUrl} from "$components/store.js";
+    import {baseUrl, loginUsername} from "$components/store.js";
     import {toastNotice} from "$components/toastr.js";
     import {DateInput} from 'date-picker-svelte'
 
-    let username = $page.params['username'];
+    let username = $loginUsername;
     onMount(async () => {
         const access_token = getCookie("accessToken");
         if (access_token == null) {
