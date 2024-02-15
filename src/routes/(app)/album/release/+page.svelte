@@ -86,7 +86,7 @@
             return;
         }
 
-        const res = await fetch(`http://localhost:8090/streaming/upload?filename=${encodeURIComponent(musicFile.name)}`, {
+        const res = await fetch($baseUrl + `/streaming/upload?filename=${encodeURIComponent(musicFile.name)}`, {
             method: 'GET',
             headers: {
                 'Authorization': getCookie('accessToken'),
