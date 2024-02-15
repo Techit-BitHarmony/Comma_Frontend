@@ -21,7 +21,7 @@
 				toastWarning('로그인 해주세요.');
 			}
 
-			const response = await fetch($baseUrl + `/credit/charges/${chargeId}`, {
+			const response = await fetch(`http://localhost:8090/credit/charges/${chargeId}`, {
 				method: 'GET',
 				credentials: 'include',
 				headers: {
