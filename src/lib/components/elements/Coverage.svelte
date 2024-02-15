@@ -23,7 +23,7 @@
 
 	<img
 			alt="Albums"
-			src="{album.imgPath}"
+			src="{imagePath}"
 			class="h-52 xs:h-64 w-full object-cover rounded"
 	/>
 </header>

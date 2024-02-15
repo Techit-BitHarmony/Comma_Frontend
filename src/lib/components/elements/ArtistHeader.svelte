@@ -3,28 +3,43 @@
 	import {baseUrl} from "$components/store";
 	import {getCookie} from "$components/token";
 	import {onMount} from "svelte";
+	import {toastWarning} from "$components/toastr";
 
 	$: ({ artistUsername } = $$restProps);
 	let followData = {};
 	$: followCheck = false;
 
 	async function follow() {
-		await fetch($baseUrl + `/follow/${artistUsername}`, {
+		const response = await fetch($baseUrl + `/follow/${artistUsername}`, {
 			method: 'POST',
 			headers: {
 				'Authorization': getCookie('accessToken'),
 			},
 		});
+
+		if (!response.ok) {
+			const errorData = await response.json();
+			toastWarning(errorData.message);
+			return;
+		}
+
 		followCheck = true;
 	}
 
 	async function unfollow() {
-		await fetch($baseUrl + `/follow/${artistUsername}`, {
+		const response = await fetch($baseUrl + `/follow/${artistUsername}`, {
 			method: 'DELETE',
 			headers: {
 				'Authorization': getCookie('accessToken'),
 			},
 		});
+
+		if (!response.ok) {
+			const errorData = await response.json();
+			toastWarning(errorData.message);
+			return;
+		}
+
 		followCheck = false;
 	}
 
@@ -63,21 +78,21 @@
 	<div class="container relative z-20 pt-8 sm:pt-16 md:pt-24 pb-8">
 		<div class="flex flex-row justify-between">
 			<div>
-				<h1 class="text-4xl text-gray-light dark:text-primary">
+				<h1 class="text-4xl text-gray-light dark:text-primary m-3">
 					{#if artistUsername}
 						{artistUsername}
 					{/if}
 				</h1>
 				{#if followCheck === true}
-					<a class="btn btn-ghost text-gray-light" on:click={unfollow}><i class="fa-solid fa-user-minus fa-lg"></i></a>
+					<a class="btn btn-ghost text-gray-light" on:click={unfollow}><i class="fa-solid fa-user-minus"></i>언팔로우</a>
 				{:else}
-					<a class="btn btn-ghost text-gray-light" on:click={follow}><i class="fa-solid fa-user-plus fa-lg"></i></a>
+					<a class="btn btn-ghost text-gray-light" on:click={follow}><i class="fa-solid fa-user-plus"></i>팔로우</a>
 				{/if}
-				<a class="btn btn-ghost text-gray-light" href="/member/{artistUsername}/donation">후원</a>
+				<a class="btn btn-ghost text-gray-light" href="/member/{artistUsername}/donation"><i class="fa-solid fa-hand-holding-dollar"></i>후원</a>
 			</div>
 			<div class="flex flex-col">
-				<a class="btn btn-ghost text-gray-light" href="/album/release">앨범 등록</a>
-				<a class="btn btn-ghost text-gray-light" href="/member/{artistUsername}/community">커뮤니티</a>
+				<a class="btn btn-ghost text-gray-light" href="/album/release"><i class="fa-solid fa-compact-disc"></i>앨범 등록</a>
+				<a class="btn btn-ghost text-gray-light" href="/member/{artistUsername}/community"><i class="fa-solid fa-list-ul"></i>커뮤니티</a>
 			</div>
 		</div>
 

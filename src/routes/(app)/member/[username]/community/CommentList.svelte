@@ -116,7 +116,7 @@
 	{#each comments as comment}
 		<div class="flex justify-between items-center">
 			<h5 class="card-title text-primary-dark dark:text-primary"><i class="fa-solid fa-user"></i>{comment.username}</h5>
-			<span class="badge dark:badge-primary ml-2"
+			<span class="badge dark:badge-primary badge-outline dark:badge-outline ml-2"
 				>{new Date(comment.createDate).toLocaleDateString('ko-KR', {
 					year: 'numeric',
 					month: '2-digit',

@@ -1,6 +1,6 @@
 <script>
   import {baseUrl} from "$components/store.js";
-  import {toastWarning} from "$components/toastr.js";
+  import {toastNotice, toastWarning} from "$components/toastr.js";
   import {goto} from "$app/navigation";
   import {setTokenCookie, checkAccessToken} from "$components/token.js";
   import {loginUsername} from "$components/store.js";
@@ -56,8 +56,8 @@
       localStorage.setItem('memberId', memberId);
 
       checkAccessToken();
-      // await goto("/");
-      alert('로그인 성공')
+      toastNotice("로그인 되었습니다.");
+      await goto("/");
     }
   }
 </script>

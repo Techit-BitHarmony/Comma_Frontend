@@ -40,16 +40,17 @@
 
 <div class="container my-4 space-y-4">
   <div>
-
+    <ArtistHeader artistUsername={username} />
   </div>
-  <ArtistHeader artistUsername={username} />
 
   <div class="container">
     <h1 class="title my-4">Albums</h1>
     <div class="wrapper-cover">
-      {#each artistAlbums.content as item}
-        <Cover {...item} />
-      {/each}
+      {#if artistAlbums.content}
+        {#each artistAlbums.content as item}
+          <Cover {...item} />
+        {/each}
+      {/if}
     </div>
   </div>
 

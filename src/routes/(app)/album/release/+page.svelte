@@ -1,8 +1,9 @@
 <script>
-    import { baseUrl } from "$components/store.js";
+    import { baseUrl, loginUsername } from "$components/store.js";
     import { toastWarning, toastNotice } from "$components/toastr.js";
     import { getCookie } from "$components/token.js";
     import {goto} from "$app/navigation";
+    import {onDestroy} from "svelte";
 
     let albumname = $state(""); // 앨범 제목을 저장하는 변수
     let filePath = $state(""); // 업로드된 파일의 URL을 저장하는 변수
@@ -11,6 +12,7 @@
     let licenseDescription = $state("해당 곡의 라이센스"); // 라이센스 설명을 저장하는 변수
     let permitChecked = $state(false); // 라이센스 체크박스의 상태를 저장하는 변수
     let price = $state(0); // 가격을 저장하는 변수
+    let source = $state({});
     let musicImageFile;
 
     async function releaseFormSubmit(event) {
@@ -63,7 +65,14 @@
                 return;
             }
 
-            //TODO 나중에 앨범 등록 성공시 앨범 상세 페이지로 이동하게 변경
+            source = new EventSource($baseUrl + `/streaming/status?username=${$loginUsername}`);
+            source.addEventListener('Encoding Status', handleEvent);
+        }
+    }
+
+    async function handleEvent(event) {
+        const data = JSON.parse(event.data);
+        if (data[2] === "COMPLETE") {
             toastNotice('앨범이 성공적으로 등록되었습니다.');
             await goto("/");
         }
@@ -155,6 +164,13 @@
 
         musicImageFile = file;
     }
+
+    onDestroy(() => {
+        if (source) {
+            source.removeEventListener('Encoding Status', handleEvent);
+            source.close();
+        }
+    });
 </script>
 
 
@@ -168,7 +184,7 @@
 
             <div class="divider"></div>
 
-            <form on:submit="{releaseFormSubmit}" method="post" class="flex flex-row">
+            <form on:submit="{releaseFormSubmit}" class="flex flex-row">
                 <!-- Left Section -->
                 <div class="flex flex-col m-5 w-1/2 relative">
                     앨범 이미지

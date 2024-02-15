@@ -25,7 +25,7 @@
             }
 
             alert('글 삭제 성공')
-			location.reload();
+			      location.reload();
             
         } catch (error) {
             console.error('글 삭제 오류:', error);

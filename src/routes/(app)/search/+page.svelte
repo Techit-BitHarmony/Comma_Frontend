@@ -62,9 +62,11 @@
 	<div class="container mt-4">
 		<h1 class="title my-4">Albums</h1>
 		<div class="wrapper-cover">
-			{#each form.albums.items as album}
-				<Cover {...album} />
-			{/each}
+			{#if form.albums.items}
+				{#each form.albums.items as album}
+					<Cover {...album} />
+				{/each}
+			{/if}
 		</div>
 	</div>
 {/if}

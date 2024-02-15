@@ -73,14 +73,14 @@
 	}
 </script>
 
-<div class="card bg-base-100 dark:bg-gray-800 p-2">
-	<div class="flex ms-3 mb-3">
+<div class="card bg-gray-light dark:bg-gray-800 p-2">
+	<div class="flex ms-3 mb-3 p-3">
 		<p class="text-3xl text-primary-dark dark:text-primary font-extrabold me-3">
 			<i class="fa-solid fa-coins me-1" /> 현재 크레딧 :
 		</p>
 		<p class="text-3xl text-primary-dark dark:text-primary font-extrabold me-3">{restCredit}</p>
 	</div>
-	<div>
+	<div class="p-3">
 		<a
 			href="/credit/charge"
 			class="btn dark:btn-primary hover:btn-primary dark:hover:btn-ghost btn-wide"
@@ -97,8 +97,8 @@
 	</div>
 </div>
 
-<div class="card bg-base-100 dark:bg-gray-800 p-4">
-	<p class="text-3xl text-primary-dark dark:text-primary font-extrabold mb-3">
+<div class="card bg-gray-light dark:bg-gray-800 p-4">
+	<p class="text-3xl text-primary-dark dark:text-primary font-extrabold mb-3 p-3">
 		<i class="fa-solid fa-clipboard me-3" />크레딧 내역
 	</p>
 	<table class="table">

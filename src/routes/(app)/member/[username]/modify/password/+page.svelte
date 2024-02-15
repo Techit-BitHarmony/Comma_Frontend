@@ -76,11 +76,11 @@
           <div class="justify-center">
               <form on:submit="{handleSubmit}" method="post">
                   <div class="flex flex-row m-5">
-                    <label for="passwordModify" class="form-label input input-bordered w-1/4 h-12 flex items-center justify-center mt-3 mr-1">비밀번호</label>
+                    <label for="passwordModify" class="form-label input input-bordered w-1/4 h-12 flex items-center justify-center mt-3 mr-1 text-gray-light">비밀번호</label>
                     <input class="input input-bordered dark:input-primary bg-gray-light dark:bg-gray-dark mt-3 w-full h-12 flex items-center justify-center" name="passwordModify" id="passwordModify" type="password" />
                   </div>
                   <div class="flex flex-row m-5">
-                      <label for="passwordModifyCheck" class="form-label input input-bordered w-1/4 h-12 flex items-center justify-center mt-3 mr-1">비밀번호 확인</label>
+                      <label for="passwordModifyCheck" class="form-label input input-bordered w-1/4 h-12 flex items-center justify-center mt-3 mr-1 text-gray-light text-center">비밀번호<br>확인</label>
                       <input class="input input-bordered dark:input-primary bg-gray-light dark:bg-gray-dark mt-3 w-full h-12 flex items-center justify-center" name="passwordModifyCheck" id="passwordModifyCheck" type="password" />
                     </div>
                   <div class="flex justify-center"> 

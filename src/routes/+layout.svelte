@@ -20,6 +20,10 @@
     followData = responseData.data;
 	}
 
+	async function moveToArtistProfile(followingUser) {
+		window.location.href = `/member/${followingUser}`;
+	}
+
 	onMount(() => {
 		loginUsername.set(localStorage.getItem('username'));
 		loginMemberId.set(localStorage.getItem('memberId'));
@@ -49,7 +53,7 @@
 			<li class="text-primary-dark dark:text-primary text-xl font-bold pt-3">팔로우 목록</li>
 			{#if $isLogin}
 				{#each followData.followingList as followingUser}
-					<li class="text-primary-dark dark:text-primary pt-3"><a href="/member/{followingUser}">{followingUser}</a></li>
+					<li class="text-primary-dark dark:text-primary pt-3"><a on:click={() => moveToArtistProfile(followingUser)}>{followingUser}</a></li>
 				{/each}
 			{:else}
 				<li class="text-primary-dark dark:text-primary pt-3">로그인 후 이용하실 수 있습니다.</li>
