@@ -2,7 +2,6 @@
 	import type { ActionData } from './$types';
 	import { enhance } from '$app/forms';
 	import Cover from '$components/elements/Cover.svelte';
-	import Artist from '$components/elements/Artist.svelte';
 
 	export let form: ActionData;
 	let group = 'artist';
@@ -52,9 +51,6 @@
 	<div class="container bg-primary-dark p-8 mt-4 md:rounded">
 		<h1 class="title text-gray-light">Artists</h1>
 		<div class="flex flex-wrap gap-4 sm:gap-7 justify-start">
-			{#each form.artists.items as releatedArtist}
-				<Artist {...releatedArtist} />
-			{/each}
 		</div>
 	</div>
 {/if}

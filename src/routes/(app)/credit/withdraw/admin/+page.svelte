@@ -126,7 +126,7 @@
 		}
 	}
 
-  function previousPage() {
+	function previousPage() {
 		currentPage.update((n) => Math.max(n - 1, 1));
 		loadWithdraws();
 	}
@@ -189,25 +189,28 @@
 			</tbody>
 		</table>
 
-    <div class="join flex justify-center">
-      {#if $totalPages > 0}
-        <button class="join-item btn btn-square" on:click={previousPage}><i class="fa-solid fa-caret-left"></i></button>
-      {/if}
-      {#each Array.from({ length: $totalPages }, (_, index) => index + 1) as pageNumber}
-        {#if pageNumber === $currentPage}
-          <button class="join-item btn btn-square btn-active" on:click={() => movePage(pageNumber)}
-            >{pageNumber}</button
-          >
-        {:else}
-          <button class="join-item btn btn-square" on:click={() => movePage(pageNumber)}
-            >{pageNumber}</button
-          >
-        {/if}
-      {/each}
-      {#if $totalPages > $currentPage}
-        <button class="join-item btn btn-square" on:click={nextPage}><i class="fa-solid fa-caret-right"></i></button>
-      {/if}
-    </div>
-
+		<div class="join flex justify-center">
+			{#if $totalPages > 0}
+				<button class="join-item btn btn-square" on:click={previousPage}
+					><i class="fa-solid fa-caret-left" /></button
+				>
+			{/if}
+			{#each Array.from({ length: $totalPages }, (_, index) => index + 1) as pageNumber}
+				{#if pageNumber === $currentPage}
+					<button class="join-item btn btn-square btn-active" on:click={() => movePage(pageNumber)}
+						>{pageNumber}</button
+					>
+				{:else}
+					<button class="join-item btn btn-square" on:click={() => movePage(pageNumber)}
+						>{pageNumber}</button
+					>
+				{/if}
+			{/each}
+			{#if $totalPages > $currentPage}
+				<button class="join-item btn btn-square" on:click={nextPage}
+					><i class="fa-solid fa-caret-right" /></button
+				>
+			{/if}
+		</div>
 	</div>
 </div>
