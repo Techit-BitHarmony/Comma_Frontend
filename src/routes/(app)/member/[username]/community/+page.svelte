@@ -1,79 +1,89 @@
-<script>
+<script lang="ts">
 	import { onMount } from 'svelte';
 	import { writable } from 'svelte/store';
 	import { page } from '$app/stores';
+	import { goto } from '$app/navigation';
+	import { loginUsername } from '$components/store.js';
+	import { isLogin } from '$components/store.js';
+	import { baseUrl } from '$components/store.js';
+	import { toastNotice } from '$components/toastr';
+	import { toastWarning } from '$components/toastr';
+	import { getCookie } from '$components/token.js';
 	import CommentList from './CommentList.svelte';
 	import DeleteButton from './DeleteButton.svelte';
 
-	let articles = writable([]);
+	let articles = writable<any[]>([]);
 	let currentPage = writable(1);
 	let totalPages = writable(1);
 	let itemsPerPage = 10;
 	let totalElements = '';
 
+	let selectedButton = '';
+	let currentCategory = '';
+
+	function selectButton(category: any) {
+		selectedButton = category; 
+		currentCategory = category; 
+		loadArticles(category);
+	}
+
 	onMount(async () => {
-		loadArticles();
+		loadArticles('');
 	});
 
-	async function loadArticles() {
+	async function loadArticles(category: any) {
 		try {
-			const accessToken = document.cookie
-				.split('; ')
-				.find((row) => row.startsWith('accessToken='))
-				?.split('=')[1];
-
-			if (!accessToken) {
-				throw new Error('AccessToken이 없습니다.');
-			}
-
-			// 현재 페이지와 페이지당 항목 수를 기반으로 데이터를 가져옵니다.
 			const response = await fetch(
-				`http://localhost:8090/community/articles/user/${$page.params.username}?page=${$currentPage}`,
+				$baseUrl +
+					`/community/articles/user/${$page.params.username}?page=${$currentPage}&category=${category}`,
 				{
 					method: 'GET',
+					credentials: 'include',
 					headers: {
-						'Content-Type': 'application/json',
-						Authorization: `${accessToken}`
+						'Content-Type': 'application/json'
 					}
 				}
 			);
 
+			const resp = await response.json();
+
 			if (!response.ok) {
-				throw new Error('네트워크 오류: ' + response.statusText);
+				toastWarning(resp.message);
+				return;
 			}
 
-			const resp = await response.json();
 			articles.set(resp.data.articleList.content);
 
 			const totalArticles = resp.data.articleList.totalElements;
 			totalElements = totalArticles;
 			totalPages.set(Math.ceil(totalArticles / itemsPerPage));
 		} catch (error) {
-			console.error('데이터를 가져오는 중 오류 발생:', error);
+			toastWarning('글 목록을 불러오는 데 실패하였습니다.');
 		}
 	}
 
 	function previousPage() {
 		currentPage.update((n) => Math.max(n - 1, 1));
-		loadArticles();
+		loadArticles(currentCategory);
+		
 	}
 
 	function nextPage() {
 		currentPage.update((n) => n + 1);
-		loadArticles();
+		loadArticles(currentCategory);
 	}
 
-	function movePage(pageNumber) {
+	function movePage(pageNumber: any) {
 		currentPage.set(pageNumber);
-		loadArticles();
+		loadArticles(currentCategory);
 	}
 
-	function scrollToArticle(articleId) {
+	function scrollToArticle(articleId: any) {
 		console.log('Scrolling to article:', articleId);
 		window.location.hash = `#article-${articleId}`;
 	}
 
-	async function submitComment(event) {
+	async function submitComment(event: any) {
 		event.preventDefault(); // 폼의 기본 동작인 페이지 새로고침을 막습니다.
 
 		const form = event.target;
@@ -81,17 +91,16 @@
 		const content = form.elements['content'].value;
 
 		try {
-			const accessToken = document.cookie
-				.split('; ')
-				.find((row) => row.startsWith('accessToken='))
-				?.split('=')[1];
+			const accessToken = getCookie('accessToken');
 
 			if (!accessToken) {
-				throw new Error('AccessToken이 없습니다.');
+				toastWarning('로그인 해주세요.');
+				return;
 			}
 
-			const response = await fetch('http://localhost:8090/community/comments', {
+			const response = await fetch($baseUrl + '/community/comments', {
 				method: 'POST',
+				credentials: 'include',
 				headers: {
 					'Content-Type': 'application/json',
 					Authorization: `${accessToken}`
@@ -99,39 +108,79 @@
 				body: JSON.stringify({ articleId, content })
 			});
 
+			const resp = await response.json();
+
 			if (!response.ok) {
-				throw new Error('네트워크 오류: ' + response.statusText);
+				toastWarning(resp.message);
 			}
 
+			location.reload();
 			scrollToArticle(articleId);
 			form.reset();
-			location.reload();
 		} catch (error) {
-			console.error('댓글을 작성하는 중 오류 발생:', error);
+			toastWarning('댓글 작성에 실패하였습니다.');
 		}
 	}
 </script>
 
 <div class="container my-4 space-y-4">
 	<div class="flex justify-between items-center my-6 mb-4">
-		<h1>커뮤니티</h1>
-		<a class="btn btn-primary" href="./community/write">글쓰기</a>
+		<h1>{$page.params.username}님의 게시판<i class="fa-solid fa-compact-disc ms-3"></i></h1>
+		{#if $isLogin === true}
+			<a
+				class="btn dark:btn-primary hover:btn-primary dark:hover:btn-ghost"
+				href="./community/write"><i class="fa-solid fa-pen-to-square"></i>글쓰기</a
+			>
+		{/if}
+	</div>
+	<div class="flex">
+		<button
+			class="btn dark:btn-primary hover:btn-primary dark:hover:btn-ghost w-2/12 {selectedButton ===
+			''
+				? 'btn-disabled'
+				: ''}"
+			on:click={() => selectButton('')}><i class="fa-solid fa-align-justify"></i>전체</button
+		>
+		<div class="divider divider-horizontal" />
+		<button
+			class="btn dark:btn-primary hover:btn-primary dark:hover:btn-ghost w-2/12 {selectedButton ===
+			'공지사항'
+				? 'btn-disabled'
+				: ''}"
+			on:click={() => selectButton('공지사항')}><i class="fa-solid fa-bullhorn"></i>공지사항</button
+		>
+		<div class="divider divider-horizontal" />
+		<button
+			class="btn dark:btn-primary hover:btn-primary dark:hover:btn-ghost w-2/12 {selectedButton ===
+			'홍보'
+				? 'btn-disabled'
+				: ''}"
+			on:click={() => selectButton('홍보')}><i class="fa-solid fa-music"></i>홍보</button
+		>
+		<div class="divider divider-horizontal" />
+		<button
+			class="btn dark:btn-primary hover:btn-primary dark:hover:btn-ghost w-2/12 {selectedButton ===
+			'소통'
+				? 'btn-disabled'
+				: ''}"
+			on:click={() => selectButton('소통')}><i class="fa-solid fa-comments"></i>소통</button
+		>
 	</div>
 
 	{#if $articles.length === 0}
-	<div class="flex justify-center">
-		<h2>등록된 게시글이 없습니다.</h2>
-	</div>
+		<div class="flex justify-center">
+			<h2 class="text-primary-dark dark:text-primary">등록된 게시글이 없습니다.</h2>
+		</div>
 	{/if}
 	{#each $articles as article, index}
-		<div class="card w-auto bg-base-100 shadow-xl">
+		<div class="card w-auto bg-base-100 dark:bg-gray-800 shadow-xl">
 			<div class="card-body">
 				<div class="flex justify-between">
 					<div class="flex-col items-center">
 						<h2 class="card-title mb-2">{article.title}</h2>
 						<div>
-							<span>작성자 {article.username}</span>
-							<span class="badge ml-2"
+							<span class="text-primary-dark dark:text-primary">작성자 : {article.username}</span>
+							<span class="badge dark:badge-primary ml-2"
 								>{new Date(article.createDate).toLocaleDateString('ko-KR', {
 									year: 'numeric',
 									month: '2-digit',
@@ -142,25 +191,42 @@
 							>
 						</div>
 					</div>
-					<div class="dropdown">
-						<div tabindex="0" role="button" class="btn btm-xs">. . .</div>
-						<ul class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52">
-							<li><a href='./community/modify?articleId={article.id}'>수정하기</a></li>
-							<li><DeleteButton articleId={article.id} /></li>
-						</ul>
-					</div>
+					{#if $loginUsername === article.username}
+						<div class="dropdown">
+							<div
+								tabindex="0"
+								role="button"
+								class="btn dark:btn-primary hover:btn-primary dark:hover:btn-ghost btm-xs"
+							>
+								. . .
+							</div>
+							<ul
+								class="dropdown-content z-[1] menu p-2 shadow bg-base-100 dark:bg-gray-600 rounded-box w-52"
+							>
+								<li>
+									<a
+										class="text-primary-dark dark:text-primary font-extrabold"
+										href="./community/modify?articleId={article.id}"><i class="fa-solid fa-hammer"></i>수정하기</a
+									>
+								</li>
+								<li><DeleteButton articleId={article.id} /></li>
+							</ul>
+						</div>
+					{/if}
 				</div>
-				<div class="divider divider-neutral"></div>
-				<p>{article.content}</p>
-				<div class="divider mt-20">댓글</div>
+				<div class="divider divider-neutral dark:divider-accent" />
+				<p class="text-primary-dark dark:text-primary">{article.content}</p>
+				<div class="divider dark:divider-accent mt-20">댓글</div>
 
 				<details class="collapse bg-base-200">
-					<summary class="collapse-title text-sm font-medium">댓글 작성하기</summary>
-					<div class="collapse-content">
+					<summary class="collapse-title bg-base-200 dark:bg-gray-600 text-sm font-medium"
+						><i class="fa-regular fa-note-sticky me-3"></i>댓글 작성하기</summary
+					>
+					<div class="collapse-content bg-base-200 dark:bg-gray-600">
 						<form id="commentForm" on:submit={submitComment}>
 							<div>
 								<input
-									class="input input-bordered input-md w-full max-w-xs"
+									class="input input-bordered input-md bg-base-100 dark:bg-gray-800 w-full max-w-xs"
 									type="text"
 									name="content"
 									placeholder="댓글을 작성하세요."
@@ -179,9 +245,8 @@
 	{/each}
 
 	<div class="join flex justify-center">
-		
 		{#if $totalPages > 0}
-		<button class="join-item btn btn-square" on:click={previousPage}>이전</button>
+			<button class="join-item btn btn-square" on:click={previousPage}><i class="fa-solid fa-caret-left"></i></button>
 		{/if}
 		{#each Array.from({ length: $totalPages }, (_, index) => index + 1) as pageNumber}
 			{#if pageNumber === $currentPage}
@@ -194,8 +259,8 @@
 				>
 			{/if}
 		{/each}
-		{#if $totalPages > 0}
-		<button class="join-item btn btn-square" on:click={nextPage}>다음</button>
+		{#if $totalPages > $currentPage}
+			<button class="join-item btn btn-square" on:click={nextPage}><i class="fa-solid fa-caret-right"></i></button>
 		{/if}
 	</div>
 </div>

@@ -1,12 +1,12 @@
 <script>
+	export let albumname, imgPath, artistNickname, artistUsername, id;
 
-	let albumname, imgPath, artistNickname, artistUsername, id;
-	albumname = $$restProps.albumname;
-	imgPath = $$restProps.imgPath;
-	artistNickname = $$restProps.artistNickname;
-	artistUsername = $$restProps.artistUsername;
-	id = $$restProps.id;
-
+	// imgPath가 null이면 기본 이미지 주소로 설정
+	$: {
+		if (!imgPath) {
+			imgPath = 'https://kv6d2rdb2209.edge.naverncp.com/GSctnLFiOr/defaultimage.jpg?type=f&w=300&h=300&ttype=jpg';
+		}
+	}
 </script>
 
 <div class="bg-primary-dark dark:bg-primary-light p-3 rounded">
