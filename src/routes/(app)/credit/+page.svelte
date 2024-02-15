@@ -7,78 +7,12 @@
 	import { baseUrl } from '$components/store.js';
 	import { toastNotice } from '$components/toastr';
 	import { toastWarning } from '$components/toastr';
-	import { loginUsername } from "$components/store.js";
 
-	let restCredit = '';
-	let creditLogs: any[] = [];
-	let withdraws: any[] = [];
-
-	// 페이지 로드 시 서버에서 데이터를 가져옴
-	onMount(async () => {
-		try {
-			const accessToken = getCookie("accessToken");
-
-			if (!accessToken) {
-				toastWarning('로그인 해주세요.');
-			}
-
-			const creditLogsResponse = await fetch($baseUrl + `/credit/creditlogs/mine`, {
-				method: 'GET',
-				credentials: 'include',
-				headers: {
-					'Content-Type': 'application/json',
-					Authorization: `${accessToken}`
-				}
-			});
-
-			const creditLogsResp = await creditLogsResponse.json();
-
-			if (!creditLogsResponse.ok) {
-				toastWarning(creditLogsResp.message)
-			}
-
-			restCredit = creditLogsResp.restCredit;
-			creditLogs = creditLogsResp.creditLogDtos;
-
-			const withdrawsResponse = await fetch('http://localhost:8090/credit/withdraws/mine', {
-				method: 'GET',
-				credentials: 'include',
-				headers: {
-					'Content-Type': 'application/json',
-					Authorization: `${accessToken}`
-				}
-			});
-
-			const withdrawsResp = await withdrawsResponse.json();
-
-			if (!withdrawsResponse.ok) {
-				toastWarning(withdrawsResp.message)
-			}
-
-			withdraws = withdrawsResp.withdraws;
-		} catch (error) {
-			toastWarning('정보를 불러오는 데에 실패하였습니다.')
-		}
-	});
 </script>
 
 <div class="container my-10 space-y-4">
-	<div class="card bg-base-100 dark:bg-gray-800 p-2">
-		<div class="flex ms-3 mb-3">
-			<p class="text-3xl text-primary-dark dark:text-primary font-extrabold me-3"><i class="fa-solid fa-coins me-1"></i> 현재 크레딧 :</p>
-			<p class="text-3xl text-primary-dark dark:text-primary font-extrabold me-3">{restCredit}</p>
-		</div>
-		<div>
-			<a href="/credit/charge" class="btn dark:btn-primary hover:btn-primary dark:hover:btn-ghost btn-wide"><i class="fa-solid fa-bolt me-2"></i> 충전하기</a>
-			<a href="/credit/withdraw/?restCredit={restCredit}" class="btn dark:btn-primary hover:btn-primary dark:hover:btn-ghost btn-wide"><i class="fa-solid fa-money-bill-transfer me-2"></i>출금하기</a>
-			{#if $loginUsername === 'admin'}
-			<a href="/credit/withdraw/admin" class="btn btn-warning dark:btn-error">관리자 페이지</a>
-			{/if}
-		</div>
-	</div>
-
-	<div class="divider dark:divider-accent"></div>
-	<CreditLogs {creditLogs} />
-	<div class="divider dark:divider-accent"></div>
-	<Withdraws {withdraws} />
+	<div class="divider dark:divider-accent" />
+	<CreditLogs />
+	<div class="divider dark:divider-accent" />
+	<Withdraws />
 </div>

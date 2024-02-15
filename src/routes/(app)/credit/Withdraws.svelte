@@ -1,6 +1,48 @@
 <!-- WithdrawalLogs.svelte -->
 <script lang="ts">
+	import { onMount } from 'svelte';
+	import { getCookie } from '$components/token.js';
+	import { baseUrl } from '$components/store.js';
+	import { toastNotice } from '$components/toastr';
+	import { toastWarning } from '$components/toastr';
+
 	export let withdraws: any[] = [];
+
+	onMount(async () => {
+		try {
+			loadWithdraws(); 
+		} catch (error) {
+			toastWarning('정보를 불러오는 데에 실패하였습니다.');
+		}
+	});
+
+	
+
+	async function loadWithdraws(){
+		const accessToken = getCookie('accessToken');
+
+			if (!accessToken) {
+				toastWarning('로그인 해주세요.');
+				return;
+			}
+
+			const withdrawsResponse = await fetch($baseUrl +'/credit/withdraws/mine', {
+				method: 'GET',
+				credentials: 'include',
+				headers: {
+					'Content-Type': 'application/json',
+					Authorization: `${accessToken}`
+				}
+			});
+
+			const withdrawsResp = await withdrawsResponse.json();
+
+			if (!withdrawsResponse.ok) {
+				toastWarning(withdrawsResp.message);
+			}
+
+			withdraws = withdrawsResp.withdraws;
+	}
 </script>
 
 <div class="card bg-base-100 dark:bg-gray-800 p-4">
