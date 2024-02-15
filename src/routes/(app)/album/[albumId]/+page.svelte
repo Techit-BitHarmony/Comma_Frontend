@@ -31,9 +31,13 @@
 
 
 		if (!response.ok) {
-			toastWarning("앨범 정보를 불러오는데 실패했습니다.");
+			toastWarning(responseData.message);
 			await goto("/");
 			return;
+		}
+
+		if(responseData.data.imgPath === null) {
+			responseData.data.imgPath = "https://kv6d2rdb2209.edge.naverncp.com/GSctnLFiOr/defaultimage.jpg?type=f&w=300&h=300&ttype=jpg";
 		}
 
 		document.getElementById('albumCover').src = responseData.data.imgPath;
