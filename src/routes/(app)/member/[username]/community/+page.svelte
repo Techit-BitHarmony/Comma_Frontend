@@ -132,7 +132,7 @@
 			>
 		{/if}
 	</div>
-	<div class="flex justify-center">
+	<div class="flex">
 		<button
 			class="btn dark:btn-primary hover:btn-primary dark:hover:btn-ghost w-2/12 {selectedButton ===
 			''

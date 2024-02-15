@@ -32,17 +32,14 @@
 			return;
 		}
 
-		const creditLogsResponse = await fetch(
-			$baseUrl + `/credit/creditlogs/mine?page=${$currentPage}`,
-			{
-				method: 'GET',
-				credentials: 'include',
-				headers: {
-					'Content-Type': 'application/json',
-					Authorization: `${accessToken}`
-				}
+		const creditLogsResponse = await fetch($baseUrl + `/credit/creditlogs/mine?page=${$currentPage}`, {
+			method: 'GET',
+			credentials: 'include',
+			headers: {
+				'Content-Type': 'application/json',
+				Authorization: `${accessToken}`
 			}
-		);
+		});
 
 		const creditLogsResp = await creditLogsResponse.json();
 
@@ -62,6 +59,7 @@
 	function previousPage() {
 		currentPage.update((n) => Math.max(n - 1, 1));
 		loadCreditLogs();
+		
 	}
 
 	function nextPage() {
@@ -131,9 +129,7 @@
 
 	<div class="join flex justify-center">
 		{#if $totalPages > 0}
-			<button class="join-item btn btn-square" on:click={previousPage}
-				><i class="fa-solid fa-caret-left" /></button
-			>
+			<button class="join-item btn btn-square" on:click={previousPage}><i class="fa-solid fa-caret-left"></i></button>
 		{/if}
 		{#each Array.from({ length: $totalPages }, (_, index) => index + 1) as pageNumber}
 			{#if pageNumber === $currentPage}
@@ -147,9 +143,7 @@
 			{/if}
 		{/each}
 		{#if $totalPages > $currentPage}
-			<button class="join-item btn btn-square" on:click={nextPage}
-				><i class="fa-solid fa-caret-right" /></button
-			>
+			<button class="join-item btn btn-square" on:click={nextPage}><i class="fa-solid fa-caret-right"></i></button>
 		{/if}
 	</div>
 </div>
