@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import { onMount } from 'svelte';
 	import { writable } from 'svelte/store';
 	import { page } from '$app/stores';
@@ -12,7 +12,7 @@
 	import CommentList from './CommentList.svelte';
 	import DeleteButton from './DeleteButton.svelte';
 
-	let articles = writable([]);
+	let articles = writable<any[]>([]);
 	let currentPage = writable(1);
 	let totalPages = writable(1);
 	let itemsPerPage = 10;
@@ -21,7 +21,7 @@
 	let selectedButton = '';
 	let currentCategory = '';
 
-	function selectButton(category) {
+	function selectButton(category: any) {
 		selectedButton = category; 
 		currentCategory = category; 
 		loadArticles(category);
@@ -31,7 +31,7 @@
 		loadArticles('');
 	});
 
-	async function loadArticles(category) {
+	async function loadArticles(category: any) {
 		try {
 			const response = await fetch(
 				$baseUrl +
@@ -73,17 +73,17 @@
 		loadArticles(currentCategory);
 	}
 
-	function movePage(pageNumber) {
+	function movePage(pageNumber: any) {
 		currentPage.set(pageNumber);
 		loadArticles(currentCategory);
 	}
 
-	function scrollToArticle(articleId) {
+	function scrollToArticle(articleId: any) {
 		console.log('Scrolling to article:', articleId);
 		window.location.hash = `#article-${articleId}`;
 	}
 
-	async function submitComment(event) {
+	async function submitComment(event: any) {
 		event.preventDefault(); // 폼의 기본 동작인 페이지 새로고침을 막습니다.
 
 		const form = event.target;
@@ -246,7 +246,7 @@
 
 	<div class="join flex justify-center">
 		{#if $totalPages > 0}
-			<button class="join-item btn btn-square" on:click={previousPage}>이전</button>
+			<button class="join-item btn btn-square" on:click={previousPage}><i class="fa-solid fa-caret-left"></i></button>
 		{/if}
 		{#each Array.from({ length: $totalPages }, (_, index) => index + 1) as pageNumber}
 			{#if pageNumber === $currentPage}
@@ -260,7 +260,7 @@
 			{/if}
 		{/each}
 		{#if $totalPages > $currentPage}
-			<button class="join-item btn btn-square" on:click={nextPage}>다음</button>
+			<button class="join-item btn btn-square" on:click={nextPage}><i class="fa-solid fa-caret-right"></i></button>
 		{/if}
 	</div>
 </div>

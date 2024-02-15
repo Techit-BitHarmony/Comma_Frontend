@@ -7,10 +7,10 @@
 	import { toastNotice } from '$components/toastr';
 	import { toastWarning } from '$components/toastr';
 
-	let withdraws = writable([]);
+	let withdraws = writable<any[]>([]);
 	let currentPage = writable(1);
 	let totalPages = writable(1);
-	let itemsPerPage = 10;
+	let itemsPerPage = 5;
 	let totalElements = '';
 
 	onMount(async () => {
@@ -64,7 +64,7 @@
 		loadWithdraws();
 	}
 
-	function movePage(pageNumber) {
+	function movePage(pageNumber: any) {
 		currentPage.set(pageNumber);
 		loadWithdraws();
 	}
@@ -118,7 +118,7 @@
 
 	<div class="join flex justify-center">
 		{#if $totalPages > 0}
-			<button class="join-item btn btn-square" on:click={previousPage}>이전</button>
+			<button class="join-item btn btn-square" on:click={previousPage}><i class="fa-solid fa-caret-left"></i></button>
 		{/if}
 		{#each Array.from({ length: $totalPages }, (_, index) => index + 1) as pageNumber}
 			{#if pageNumber === $currentPage}
@@ -132,7 +132,7 @@
 			{/if}
 		{/each}
 		{#if $totalPages > $currentPage}
-			<button class="join-item btn btn-square" on:click={nextPage}>다음</button>
+			<button class="join-item btn btn-square" on:click={nextPage}><i class="fa-solid fa-caret-right"></i></button>
 		{/if}
 	</div>
 </div>
