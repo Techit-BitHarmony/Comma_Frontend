@@ -13,8 +13,8 @@
 - [Comma BackEnd](https://github.com/Techit-BitHarmony/Comma)  
   
 ### TechStack
-![comma_TechStack](https://github.com/Techit-BitHarmony/Comma_Frontend/assets/84844598/d15e27a6-d3d2-47bd-93e5-b935086490eb)  
-  
+![comma_TechStack](https://github.com/Techit-BitHarmony/Comma_Frontend/assets/84844598/d15e27a6-d3d2-47bd-93e5-b935086490eb)      
+    
 ### ERD
 ![Com,ma ERD_2 (1)](https://github.com/Techit-BitHarmony/Comma_Frontend/assets/84844598/d5a04df4-5d03-4443-bae1-c363b7273685)  
   
