@@ -5,6 +5,7 @@
 	import { baseUrl } from '$components/store.js';
 	import { toastNotice } from '$components/toastr';
 	import { toastWarning } from '$components/toastr';
+	import { getCookie } from '$components/token.js';
 
 	let restCredit = $page.url.searchParams.get('restCredit');
 
@@ -17,10 +18,7 @@
 			const bankAccountNo = form.elements['bankAccountNo'].value;
 			const withdrawAmount = form.elements['withdrawAmount'].value;
 
-			const accessToken = document.cookie
-				.split('; ')
-				.find((row) => row.startsWith('accessToken='))
-				?.split('=')[1];
+			const accessToken = getCookie('accessToken');
 
 			if (!accessToken) {
 				toastWarning('로그인 해주세요.');
