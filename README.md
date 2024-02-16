@@ -12,4 +12,4 @@
 - [Comma BackEnd](https://github.com/Techit-BitHarmony/Comma)
 
 ### 기술적 의사결정
-[노션📚][https://www.notion.so/7b5df4d052444e0f9df19ae4b1c4f660?pvs=4]
+[노션📚] [https://www.notion.so/7b5df4d052444e0f9df19ae4b1c4f660?pvs=4]
