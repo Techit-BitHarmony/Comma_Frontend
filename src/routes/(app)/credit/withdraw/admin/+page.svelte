@@ -1,14 +1,12 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { loginUsername } from '$components/store.js';
-	import { page } from '$app/stores';
 	import { goto } from '$app/navigation';
 	import { baseUrl } from '$components/store.js';
 	import { toastNotice } from '$components/toastr';
 	import { toastWarning } from '$components/toastr';
 	import { getCookie } from '$components/token.js';
 	import { writable } from 'svelte/store';
-	import Withdraws from '../../Withdraws.svelte';
 
 	let withdraws = writable<any[]>([]);
 	let currentPage = writable(1);
@@ -17,11 +15,6 @@
 	let totalElements = '';
 
 	onMount(async () => {
-		if ($loginUsername !== 'admin') {
-			toastWarning('접근 권한이 없습니다.');
-			await goto('/credit');
-		}
-
 		loadWithdraws();
 	});
 
@@ -49,6 +42,8 @@
 
 			if (!withdrawsResponse.ok) {
 				toastWarning(withdrawsResp.message);
+				await goto('/credit')
+				return;
 			}
 
 			withdraws.set(withdrawsResp.withdraws.content);
@@ -82,6 +77,7 @@
 
 			if (!response.ok) {
 				toastWarning(resp.message);
+				return; 
 			}
 
 			toastNotice('출금 승인 성공');
@@ -94,10 +90,7 @@
 
 	async function rejectWithdraw(withdrawId: number) {
 		try {
-			const accessToken = document.cookie
-				.split('; ')
-				.find((row) => row.startsWith('accessToken='))
-				?.split('=')[1];
+			const accessToken = getCookie('accessToken');
 
 			if (!accessToken) {
 				toastWarning('로그인 해주세요.');
@@ -116,6 +109,7 @@
 
 			if (!response.ok) {
 				toastWarning(resp.message);
+				return; 
 			}
 
 			toastNotice('출금 거절 성공');
@@ -161,7 +155,7 @@
 				{#each $withdraws as withdraw}
 					<tr>
 						<td>{new Date(withdraw.applyDate).toLocaleDateString('ko-KR')}</td>
-						<td>{withdraw.applicant.username}</td>
+						<td>{withdraw.applicantName}</td>
 						<td>{withdraw.bankName}</td>
 						<td>{withdraw.bankAccountNo}</td>
 						<td>{withdraw.withdrawAmount}</td>
