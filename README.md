@@ -19,6 +19,7 @@
 ![Com,ma ERD_2 (1)](https://github.com/Techit-BitHarmony/Comma_Frontend/assets/84844598/d5a04df4-5d03-4443-bae1-c363b7273685)
 
 ## [팀 노션 페이지](https://likelion.notion.site/9-4ee8e96c7a2d4c79ba7799897a1f1352)
+<img width="960" alt="스크린샷 2024-02-16 오전 11 36 50" src="https://github.com/Techit-BitHarmony/Comma_Frontend/assets/84844598/036070e1-ad6b-4b82-b3e0-c7cad9bf1e87">
 
 ### [기술적 의사결정](https://www.notion.so/7b5df4d052444e0f9df19ae4b1c4f660?pvs=4)
 
