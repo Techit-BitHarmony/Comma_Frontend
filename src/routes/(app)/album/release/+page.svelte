@@ -100,17 +100,18 @@
         if (res.ok) {
             const { data } = await res.json();
 
+            filePath = data.filePath;
+
+            let encodedFilePath = encodeURIComponent(filePath);
+            let source = new EventSource($baseUrl + `/streaming/status?filePath=${encodedFilePath}`);
+            source.addEventListener('Encoding Status', handleEvent);
+
             // Presigned URL로 파일 업로드
             const uploadRes = await fetch(data.uploadUrl, { method: 'PUT', body: musicFile });
 
             if (uploadRes.ok) {
-                filePath = data.filePath;
                 if (statElement) statElement.innerHTML = '업로드 성공!';
                 toastNotice('업로드 성공!');
-
-                let encodedFilePath = encodeURIComponent(filePath);
-                let source = new EventSource($baseUrl + `/streaming/status?filePath=${encodedFilePath}`);
-                source.addEventListener('Encoding Status', handleEvent);
 
             } else {
                 if (statElement) statElement.innerHTML = '업로드 실패!';
