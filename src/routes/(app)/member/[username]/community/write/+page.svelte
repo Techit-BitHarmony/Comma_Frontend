@@ -4,6 +4,7 @@
 	import { goto } from '$app/navigation'
 	import { toastNotice } from '$components/toastr';
 	import { toastWarning } from '$components/toastr';
+	import {baseUrl} from "$components/store";
 
 
 	// 컴포넌트가 마운트된 후 실행되는 함수
@@ -29,7 +30,7 @@
 			}
 
 			try {
-				const response = await fetch('http://localhost:8090/community/articles', {
+				const response = await fetch($baseUrl + '/community/articles', {
 					method: 'POST',
 					headers: {
 						'Content-Type': 'application/json',
