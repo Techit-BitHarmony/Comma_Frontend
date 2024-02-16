@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { loginUsername } from '$components/store.js';
+	import { page } from '$app/stores';
 	import { goto } from '$app/navigation';
 	import { baseUrl } from '$components/store.js';
 	import { toastNotice } from '$components/toastr';

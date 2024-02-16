@@ -44,6 +44,7 @@
 			}
 		);
 
+
 		const creditLogsResp = await creditLogsResponse.json();
 
 		if (!creditLogsResponse.ok) {
