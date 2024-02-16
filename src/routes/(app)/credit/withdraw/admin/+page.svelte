@@ -1,14 +1,12 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { loginUsername } from '$components/store.js';
-	import { page } from '$app/stores';
 	import { goto } from '$app/navigation';
 	import { baseUrl } from '$components/store.js';
 	import { toastNotice } from '$components/toastr';
 	import { toastWarning } from '$components/toastr';
 	import { getCookie } from '$components/token.js';
 	import { writable } from 'svelte/store';
-	import Withdraws from '../../Withdraws.svelte';
 
 	let withdraws = writable<any[]>([]);
 	let currentPage = writable(1);
@@ -17,11 +15,6 @@
 	let totalElements = '';
 
 	onMount(async () => {
-		if ($loginUsername !== 'admin') {
-			toastWarning('접근 권한이 없습니다.');
-			await goto('/credit');
-		}
-
 		loadWithdraws();
 	});
 
@@ -49,6 +42,8 @@
 
 			if (!withdrawsResponse.ok) {
 				toastWarning(withdrawsResp.message);
+				await goto('/credit')
+				return;
 			}
 
 			withdraws.set(withdrawsResp.withdraws.content);
@@ -82,6 +77,7 @@
 
 			if (!response.ok) {
 				toastWarning(resp.message);
+				return; 
 			}
 
 			toastNotice('출금 승인 성공');
@@ -94,10 +90,7 @@
 
 	async function rejectWithdraw(withdrawId: number) {
 		try {
-			const accessToken = document.cookie
-				.split('; ')
-				.find((row) => row.startsWith('accessToken='))
-				?.split('=')[1];
+			const accessToken = getCookie('accessToken');
 
 			if (!accessToken) {
 				toastWarning('로그인 해주세요.');
@@ -116,6 +109,7 @@
 
 			if (!response.ok) {
 				toastWarning(resp.message);
+				return; 
 			}
 
 			toastNotice('출금 거절 성공');
@@ -126,7 +120,7 @@
 		}
 	}
 
-  function previousPage() {
+	function previousPage() {
 		currentPage.update((n) => Math.max(n - 1, 1));
 		loadWithdraws();
 	}
@@ -149,6 +143,7 @@
 			<thead class="bg-gray-200 text-center text-base font-bold">
 				<tr>
 					<th>날짜</th>
+					<th>신청인</th>
 					<th>은행명</th>
 					<th>계좌번호</th>
 					<th>출금신청액</th>
@@ -160,6 +155,7 @@
 				{#each $withdraws as withdraw}
 					<tr>
 						<td>{new Date(withdraw.applyDate).toLocaleDateString('ko-KR')}</td>
+						<td>{withdraw.applicantName}</td>
 						<td>{withdraw.bankName}</td>
 						<td>{withdraw.bankAccountNo}</td>
 						<td>{withdraw.withdrawAmount}</td>
@@ -189,25 +185,28 @@
 			</tbody>
 		</table>
 
-    <div class="join flex justify-center">
-      {#if $totalPages > 0}
-        <button class="join-item btn btn-square" on:click={previousPage}><i class="fa-solid fa-caret-left"></i></button>
-      {/if}
-      {#each Array.from({ length: $totalPages }, (_, index) => index + 1) as pageNumber}
-        {#if pageNumber === $currentPage}
-          <button class="join-item btn btn-square btn-active" on:click={() => movePage(pageNumber)}
-            >{pageNumber}</button
-          >
-        {:else}
-          <button class="join-item btn btn-square" on:click={() => movePage(pageNumber)}
-            >{pageNumber}</button
-          >
-        {/if}
-      {/each}
-      {#if $totalPages > $currentPage}
-        <button class="join-item btn btn-square" on:click={nextPage}><i class="fa-solid fa-caret-right"></i></button>
-      {/if}
-    </div>
-
+		<div class="join flex justify-center">
+			{#if $totalPages > 0}
+				<button class="join-item btn btn-square" on:click={previousPage}
+					><i class="fa-solid fa-caret-left" /></button
+				>
+			{/if}
+			{#each Array.from({ length: $totalPages }, (_, index) => index + 1) as pageNumber}
+				{#if pageNumber === $currentPage}
+					<button class="join-item btn btn-square btn-active" on:click={() => movePage(pageNumber)}
+						>{pageNumber}</button
+					>
+				{:else}
+					<button class="join-item btn btn-square" on:click={() => movePage(pageNumber)}
+						>{pageNumber}</button
+					>
+				{/if}
+			{/each}
+			{#if $totalPages > $currentPage}
+				<button class="join-item btn btn-square" on:click={nextPage}
+					><i class="fa-solid fa-caret-right" /></button
+				>
+			{/if}
+		</div>
 	</div>
 </div>
