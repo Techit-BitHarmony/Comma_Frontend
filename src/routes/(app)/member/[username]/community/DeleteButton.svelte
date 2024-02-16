@@ -1,4 +1,6 @@
 <script>
+    import { baseUrl } from '$components/store.js';
+
     export let articleId;
 
     async function deleteArticle() {
