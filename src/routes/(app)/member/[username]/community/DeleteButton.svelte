@@ -1,4 +1,6 @@
 <script>
+    import { baseUrl } from '$components/store.js';
+
     export let articleId;
 
     async function deleteArticle() {
@@ -12,7 +14,7 @@
         }
 
         try {
-            const response = await fetch(`http://localhost:8090/community/articles/${articleId}`, {
+            const response = await fetch(`${$baseUrl}/community/articles/${articleId}`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
