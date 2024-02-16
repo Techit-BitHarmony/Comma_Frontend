@@ -6,13 +6,14 @@
     import {onDestroy} from "svelte";
 
     let albumname = $state(""); // 앨범 제목을 저장하는 변수
-    let filePath = $state(""); // 업로드된 파일의 URL을 저장하는 변수
+    let filePath = $state(""); // 업로드된 파일의 경로를 저장하는 변수
     let genre = $state("default"); // 앨범 장르를 저장하는 변수
     let licenseChecked = $state(false); // 라이센스 체크박스의 상태를 저장하는 변수
     let licenseDescription = $state("해당 곡의 라이센스"); // 라이센스 설명을 저장하는 변수
     let permitChecked = $state(false); // 라이센스 체크박스의 상태를 저장하는 변수
     let price = $state(0); // 가격을 저장하는 변수
     let source = $state({});
+    let encodeState = $state(false);
     let musicImageFile;
 
     async function releaseFormSubmit(event) {
@@ -65,16 +66,17 @@
                 return;
             }
 
-            source = new EventSource($baseUrl + `/streaming/status?username=${$loginUsername}`);
-            source.addEventListener('Encoding Status', handleEvent);
+            toastNotice('앨범이 성공적으로 등록되었습니다.');
+            await goto("/");
         }
     }
 
     async function handleEvent(event) {
+        const statElement = document.getElementById('stat');
         const data = JSON.parse(event.data);
-        if (data[2] === "COMPLETE") {
-            toastNotice('앨범이 성공적으로 등록되었습니다.');
-            await goto("/");
+        if (data[1] === "COMPLETE") {
+            if (statElement) statElement.innerHTML = '인코딩 완료!';
+            encodeState = true;
         }
     }
 
@@ -103,9 +105,14 @@
             const uploadRes = await fetch(data.uploadUrl, { method: 'PUT', body: musicFile });
 
             if (uploadRes.ok) {
-                filePath = data.uploadUrl;
+                filePath = data.filePath;
                 if (statElement) statElement.innerHTML = '업로드 성공!';
                 toastNotice('업로드 성공!');
+
+                let encodedFilePath = encodeURIComponent(filePath);
+                let source = new EventSource($baseUrl + `/streaming/status?filePath=${encodedFilePath}`);
+                source.addEventListener('Encoding Status', handleEvent);
+
             } else {
                 if (statElement) statElement.innerHTML = '업로드 실패!';
                 toastWarning('업로드 실패!');
@@ -125,7 +132,7 @@
         const fileExtension = file.name.split('.').pop().toLowerCase();
 
         // 확장자 제한
-        const allowedExtensions = ['mp3', 'wav', 'flac'];
+        const allowedExtensions = ['mp3'];
 
         // 확장자가 아니라면 오류
         if (!allowedExtensions.includes(fileExtension)) {
@@ -167,10 +174,7 @@
     }
 
     onDestroy(() => {
-        if (source) {
-            source.removeEventListener('Encoding Status', handleEvent);
-            source.close();
-        }
+        source.onmessage = null;
     });
 </script>
 
@@ -239,7 +243,11 @@
                     {/if}
 
                     <div class="flex flex-col m-5">
-                        <button type="submit" class="btn dark:btn-primary hover:btn-primary dark:hover:btn-ghost mt-3 w-full">앨범 등록하기</button>
+                        {#if encodeState}
+                            <button type="submit" class="btn dark:btn-primary hover:btn-primary dark:hover:btn-ghost mt-3 w-full">앨범 등록하기</button>
+                        {:else}
+                            <a class="btn mt-3 w-full">업로드 및 인코딩을 완료해주세요!</a>
+                        {/if}
                     </div>
                 </div>
             </form>
