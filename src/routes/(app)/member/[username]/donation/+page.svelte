@@ -3,11 +3,13 @@
     import {page} from '$app/stores';
     import {getCookie} from '$components/token.js';
     import {goto} from "$app/navigation";
-    import {baseUrl} from "$components/store.js";
+    import {baseUrl, loginUsername} from "$components/store.js";
     import {toastNotice} from "$components/toastr.js";
     import {DateInput} from 'date-picker-svelte'
 
-    let username = $page.params['username'];
+    let username = $loginUsername;
+    let artist = $page.params['username'];
+
     onMount(async () => {
         const access_token = getCookie("accessToken");
         if (access_token == null) {
@@ -17,7 +19,7 @@
 
     let donation_request = {
         patronName: username,
-        artistName: "",
+        artistName: artist,
         amount: 0,
         message: "",
         anonymous: false
@@ -26,7 +28,7 @@
     let date = new Date();
     let donation_regular_request = {
         patronName: username,
-        artistName: "",
+        artistName: artist,
         amount: 0,
         executeDay: date.getDate(),
         anonymous: false
