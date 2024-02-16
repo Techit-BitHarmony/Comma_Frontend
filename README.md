@@ -7,6 +7,7 @@
 
 ![main](https://github.com/Techit-BitHarmony/Comma_Frontend/assets/51808344/0b9d3a70-15cc-452c-810b-bb11aad7b4ff)
 
+
 ### 백엔드 작업물로 이동
 - 자세한 내용은 백엔드 Repository에서 확인 가능합니다!
 - [Comma BackEnd](https://github.com/Techit-BitHarmony/Comma)
@@ -17,12 +18,12 @@
 ### ERD
 ![Com,ma ERD_2 (1)](https://github.com/Techit-BitHarmony/Comma_Frontend/assets/84844598/d5a04df4-5d03-4443-bae1-c363b7273685)
 
-
+## [팀 노션 페이지](https://likelion.notion.site/9-4ee8e96c7a2d4c79ba7799897a1f1352)
 
 ### [기술적 의사결정](https://www.notion.so/7b5df4d052444e0f9df19ae4b1c4f660?pvs=4)
 
 
 ### [트러블 슈팅](https://www.notion.so/a758174d8ca243438c1cda75758f479d?v=304dce628cfd4d51b9a83754984bf4ad&pvs=4)
 
-### 팀원
+## 팀원
 조유민, 김용욱, 박상혁, 조동국, 문창현
